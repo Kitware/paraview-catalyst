@@ -32,18 +32,59 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guides', link: '/guide/markdown-examples' }
+      { text: 'Guides', link: '/guide/concepts' },
+      { text: 'Use Cases', link: '/usecase/' },
+      {
+        text: 'Resources',
+        items: [
+          { text: 'API', link: 'https://trame.readthedocs.io/en/latest/index.html' },
+          { text: 'Discussions', link: 'https://github.com/Kitware/trame/discussions' },
+          { text: 'Bugs', link: 'https://github.com/Kitware/trame/issues' },
+          { text: 'Services', link: 'https://www.kitware.com/trame/' },
+        ]
+      }
     ],
 
     sidebar: {
       '/guide/': [
         {
+          text: 'Introduction',
+          items: [
+            { text: 'Concepts', link: '/guide/concepts' },
+            { text: 'Getting started', link: '/guide/getting-started' }
+          ]
+        },
+        {
           text: 'Examples',
           items: [
-            { text: 'Markdown Examples', link: '/guide/markdown-examples' },
-            { text: 'Runtime API Examples', link: '/guide/api-examples' }
+            { text: 'C', link: '/guide/example-c' },
+            { text: 'Fortran 90', link: '/guide/example-fortran' },
+            { text: 'Python', link: '/guide/example-python' },
+            { text: 'C++', link: '/guide/example-cxx' },
           ]
-        }
+        },
+        {
+          text: 'Extract types',
+          items: [
+            { text: 'Images', link: '/guide/example-image' },
+            { text: 'Meshes', link: '/guide/example-mesh' },
+          ]
+        },
+      ],
+      '/usecase/': [
+        {
+          text: 'National laboratories',
+          items: [
+            { text: 'Los Alamos', link: '/usecase/lanl' },
+            { text: 'Berkley', link: '/usecase/berkley' }
+          ]
+        },
+        {
+          text: 'Industry',
+          items: [
+            { text: 'XXX', link: '/usecase/xxx' },
+          ]
+        },
       ],
     },
     footer: {
