@@ -37,10 +37,10 @@ export default defineConfig({
       {
         text: 'Resources',
         items: [
-          { text: 'API', link: 'https://trame.readthedocs.io/en/latest/index.html' },
-          { text: 'Discussions', link: 'https://github.com/Kitware/trame/discussions' },
-          { text: 'Bugs', link: 'https://github.com/Kitware/trame/issues' },
-          { text: 'Services', link: 'https://www.kitware.com/trame/' },
+          { text: 'API', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Discussions', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Bugs', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Services', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
         ]
       }
     ],

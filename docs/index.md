@@ -34,14 +34,14 @@ features:
       src: /logos/opensource.svg
       alt: Pure Python
       width: 28
-    details: trame is an open source project licensed under Apache License Version 2.0 which allows users to create open source or commercial applications without any licensing worries.
+    details: ParaView Catalyst is an open source project licensed under BSD 3-Clause license that enables the broadest possible audience, including commercial organizations, to use the software royalty free.
     link: https://www.kitware.com/open-source/
   - title: Support and Services
     icon:
       src: /logos/k.svg
       alt: Kitware Inc.
       width: 20
-    details: Kitware can help you get started, create custom components, or even build full applications. Our team is here to help.  Please contact us
-    link: https://www.kitware.com/trame/
+    details: Kitware can help you get started intergrating ParaView Catalyst into your simulation. Our team is here to help.  Please contact us
++    link: https://www.kitware.com/support
 ---
 
