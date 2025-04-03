@@ -38,9 +38,9 @@ export default defineConfig({
         text: 'Resources',
         items: [
           { text: 'API', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
-          { text: 'Discussions', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
-          { text: 'Bugs', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
-          { text: 'Services', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Discussions', link: 'https://discourse.paraview.org/c/in-situ-support' },
+          { text: 'Bugs', link: 'https://gitlab.kitware.com/groups/paraview/-/issues' },
+          { text: 'Services', link: 'https://www.kitware.com/support' },
         ]
       }
     ],
