@@ -2,7 +2,7 @@ MPAS-Ocean is a state-of-the-art ocean modeling system developed by the COSIM pr
 
 <figure>
     <video control loop autoplay>
-        <source src="/paraview-catalyst/assets/images/usecase/gallery/arctic-viewer-MPAS.mp4" alt="MPASO">
+        <source src="/assets/images/usecase/gallery/arctic-viewer-MPAS.mp4" alt="MPASO">
     </video>
     <figcaption>MPAS-Ocean simulation indicating isosurfaces that represent the
 locations of water masses within the ocean of temperature colored by salinity.</figcaption>

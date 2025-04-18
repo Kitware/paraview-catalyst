@@ -9,7 +9,7 @@ The simulation itself was a technical feat: a 1100×1000×34 structured grid acr
 
 <figure>
     <video control loop autoplay>
-        <source src="/paraview-catalyst/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
+        <source src="/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
     </video>
     <figcaption>Rendering of the QRAIN variable in the region of interest.</figcaption>
 </figure>
