@@ -7,7 +7,7 @@ const { Layout } = DefaultTheme
 <template>
   <Layout>
     <template #home-hero-image>
-      <img src="/paraview-catalyst/assets/images/usecase/gallery/warpX.gif" class="hero-video" />
+      <img src="/assets/images/usecase/gallery/warpX.gif" class="hero-video" />
       <!--
         <iframe
             class="hero-video"
