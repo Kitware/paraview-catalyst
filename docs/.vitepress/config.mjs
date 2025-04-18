@@ -73,10 +73,15 @@ export default defineConfig({
       ],
       '/usecase/': [
         {
-          text: 'National laboratories',
+          text: 'Problem Domains',
           items: [
-            { text: 'Los Alamos', link: '/usecase/lanl' },
-            { text: 'Berkley', link: '/usecase/berkley' }
+            { text: 'Hydrodynamics', link: '/usecase/lulesh' },
+            { text: 'Supersonic Turbulence', link: '/usecase/turbulence' },
+            { text: 'AI in CFD', link: '/usecase/ai_and_cfd' },
+            { text: 'Deep Learning', link: '/usecase/deep_learning' },
+            { text: 'Ocean Simulation', link: '/usecase/mpaso' },
+            { text: 'Cyclonic Simulation', link: '/usecase/cyclonic' },
+            { text: 'High-Energy Physics', link: '/usecase/warpx' }
           ]
         },
         {

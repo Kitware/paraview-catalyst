@@ -1,6 +1,13 @@
 # What is ParaView Catalyst?
 
-ParaView Catalyst is an open-source software framework that empowers your simulations with cutting-edge in situ visualization and analysis capabilities, all while minimizing disruptions to your existing code. Built upon the foundation of our award-winning ParaView architecture, ParaView Catalyst dramatically reduces the input/output (I/O) bottleneck that is commonly associated with traditional post-processing techniques.
+ParaView Catalyst is an open-source software framework that empowers your simulations with cutting-edge in situ visualization and analysis capabilities, all while minimizing disruptions to your existing code.  Its flexible, high-performance architecture enables in situ analysis on everything from desktop workstations to the most advanced exascale supercomputers, leveraging both CPUs and GPUs to deliver real-time, insight-rich visualizations that drive discovery and innovation.
+
+
+|![Video](/assets/images/guide/concepts/CatalystBallVideo1.mp4)|
+|:--:|
+|Comparing Traditional Post-Processing (left) to In situ visualization using ParaView Catalyst (right)|
+
+Built upon the foundation of our award-winning ParaView architecture, ParaView Catalyst dramatically reduces the input/output (I/O) bottleneck that is commonly associated with traditional post-processing techniques.
 
 By integrating visualization and analysis directly into your simulation workflow, ParaView Catalyst enables you to extract insights and understanding from your data in real time, without the need for time-consuming and resource-intensive data transfer and storage. This in situ approach not only accelerates your overall workflow but also opens up new possibilities for interactive exploration and steering of your simulations.
 
@@ -14,9 +21,10 @@ In conventional post-processing approaches, the simulation will write out the in
 
 ## Attacking the I/O Problem
 
-The in situ approach used by ParaView Catalyst addresses the I/O issue by performing the post-processing using the simulation in core; hence removing  the need to write out timesteps to disk.  This does not completely eliminate I/O associated with post-processing since the visualization information does need to be saved; however, the information associated with the post-processed result is significantly less than the original timestep information. This will allow the simulation to analyze more timesteps than the conventional approach in less time.
+The in situ approach used by ParaView Catalyst addresses the I/O issue by performing the post-processing using the simulation in core; hence removing  the need to write out timesteps to disk.  This does not completely eliminate I/O associated with post-processing since the visualization information does need to be saved; however, the information associated with the post-processed result is significantly less than the original timestep information. This will allow the simulation to analyze more timesteps than the conventional approach in less time as shown in the video above.
 
 ![I/O Problem](/assets/images/guide/concepts/concept-io.png)
+
 
 ## How Does ParaView Catalyst Interface With the Simulation?
 

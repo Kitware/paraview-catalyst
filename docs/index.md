@@ -15,20 +15,20 @@ hero:
       link: /guide/getting-started
 
 features:
-  - title: ParaView
-    icon:
-      src: /logos/paraview-icon.png
-      alt: ParaView
-      width: 28
-    details: Process and render your data seemlessly
-    link: https://www.paraview.org/
   - title: In Action
     icon:
       src: /logos/favicon-196x196.png
       alt: Pure Python
       width: 28
-    details: bla bla bla
+    details: ParaView Catalyst has powered visualization across an impressive spectrum of scientific and engineering domains—from the subatomic world of High-Energy Physics to the complex flows of Computational Fluid Dynamics. 
     link: /usecase/
+  - title: ParaView
+    icon:
+      src: /logos/paraview-icon.png
+      alt: ParaView
+      width: 28
+    details: At the core of ParaView Catalyst lies ParaView itself—an award-winning, state-of-the-art platform for scientific visualization and analysis. ParaView seamlessly adapts to a wide range of computational environments, from lightweight laptops to the world’s most powerful exascale supercomputers. 
+    link: https://www.paraview.org/
   - title: Open Source
     icon:
       src: /logos/opensource.svg
@@ -42,6 +42,6 @@ features:
       alt: Kitware Inc.
       width: 20
     details: Kitware can help you get started intergrating ParaView Catalyst into your simulation. Our team is here to help.  Please contact us
-+    link: https://www.kitware.com/support
+    link: https://www.kitware.com/support
 ---
 
