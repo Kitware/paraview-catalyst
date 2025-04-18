@@ -2,10 +2,12 @@
 
 ParaView Catalyst is an open-source software framework that empowers your simulations with cutting-edge in situ visualization and analysis capabilities, all while minimizing disruptions to your existing code.  Its flexible, high-performance architecture enables in situ analysis on everything from desktop workstations to the most advanced exascale supercomputers, leveraging both CPUs and GPUs to deliver real-time, insight-rich visualizations that drive discovery and innovation.
 
-
-|![Video](/assets/images/guide/concepts/CatalystBallVideo1.mp4)|
-|:--:|
-|Comparing Traditional Post-Processing (left) to In situ visualization using ParaView Catalyst (right)|
+<figure>
+    <video control loop autoplay>
+        <source src="/assets/images/guide/concepts/CatalystBallVideo1.mp4" alt="Rolling Ball Simulation">
+    </video>
+    <figcaption>Comparing Traditional Post-Processing (left) to In situ visualization using ParaView Catalyst (right).</figcaption>
+</figure>
 
 Built upon the foundation of our award-winning ParaView architecture, ParaView Catalyst dramatically reduces the input/output (I/O) bottleneck that is commonly associated with traditional post-processing techniques.
 

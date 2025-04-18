@@ -7,9 +7,12 @@ Cyclone Chapala, one of the most powerful tropical cyclones ever recorded in the
 
 The simulation itself was a technical feat: a 1100×1000×34 structured grid across 138 time steps, tracking complex dynamics including velocity fields and scalar quantities for cloud, graupel, ice, rain, snow, and vapor—resulting in over 300 GB of data. For simulation developers, this scale of output introduces a critical challenge: I/O becomes the primary bottleneck, severely impacting overall performance and limiting the feasibility of traditional post-processing workflows.
 
-|![Image](/assets/images/usecase/gallery/cyclone1.mp4)|
-|:--:|
-|Rendering of the QRAIN variable in the region of interest.|
+<figure>
+    <video control loop autoplay>
+        <source src="/paraview-catalyst/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
+    </video>
+    <figcaption>Rendering of the QRAIN variable in the region of interest.</figcaption>
+</figure>
 
 To address this, the team used ParaView Catalyst for in situ visualization and analysis. By embedding Catalyst directly into the WRF simulation, they eliminated the need for costly intermediate storage, enabling real-time inspection of key variables and fluid dynamics. This approach not only improved performance but also empowered researchers to iteratively refine their model and extract insights on the fly—an increasingly essential capability for next-generation geophysical simulations.
 
