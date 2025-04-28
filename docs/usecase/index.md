@@ -31,7 +31,7 @@ layout: page
 		<tr>
 			<td><a href="/paraview-catalyst/usecase/ai_and_cfd.html"><img src="/assets/images/usecase/gallery/unlocking-ai-potential-in-computational-science-2.jpg" alt="AIandCFD"></a></td>
 			<td><a href="/paraview-catalyst/usecase/deep_learning.html"><img src="/assets/images/usecase/gallery/aiflow.png" alt="DeepLearning"></a></td>
-			<td></td>
+			<td><a href="/paraview-catalyst/usecase/combustion.html"><img src="/assets/images/usecase/gallery/in-situ-analysis-2-1024x875.jpg" alt="Combustion Simulation"></a></td>
 		</tr>
 	</tbody>
 </table>

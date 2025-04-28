@@ -33,7 +33,7 @@ The in situ approach used by ParaView Catalyst addresses the I/O issue by perfor
 Introducing Catalyst, Conduit, and Mesh Blueprint
 Your simulation code itself will not know about ParaView Catalyst but will be using a small easy to use library called Catalyst.  The Catalyst library is written in C but also provides C++, Python, and FORTRAN wrappings.  It provides the routines to initialize and finalize Catalyst as well as a routine to execute  the processing of a timestep.
 
-For representing the data associated with the simulation, Catalyst uses Conduit.  Conduit, an open-source project developed by Lawrence Livermore National Laboratory, offers an intuitive model for representing hierarchical scientific data in C++, C, Fortran, and Python. Its applications include in-core data coupling between packages, serialization, and I/O operations.
+For representing the data associated with the simulation, Catalyst uses Conduit.  Conduit, an open-source project developed by Lawrence Livermore National Laboratory, offers an intuitive model for representing hierarchical scientific data in C++, C, FORTRAN, and Python. Its applications include in-core data coupling between packages, serialization, and I/O operations.
 
 Using Conduit, you can describe the structure of key pieces of the simulation.  For example, how are the points, mesh elements, and fields represented.  In most cases, this will not involve any data duplication and thereby will not impact the simulation’s memory footprint.
 
@@ -46,4 +46,4 @@ ParaView Catalyst is an implemented backend for Catalyst and is dynamically load
 
 ### Making sure the simulation and the Catalyst Backend are on the same page - Mesh Blueprint
 
-We have said that Conduit provides a flexible representation used to bridge between the solver and the Catalyst Backend, but how do we guarantee  that the backend is interpreting the representation correctly?  To ensure the Catalyst Backend correctly deciphers the flexible representation provided by Conduit, both sides must agree on and utilize a schema alongside the Conduit representation. In the case of ParaView Catalyst, the Mesh Blueprint specification fulfills this role.   
+We have said that Conduit provides a flexible representation used to bridge between the solver and the Catalyst Backend, but how do we guarantee  that the backend is interpreting the representation correctly?  To ensure the Catalyst Backend correctly deciphers the flexible representation provided by Conduit, both sides must agree on and utilize a schema alongside the Conduit representation. In the case of ParaView Catalyst, the Mesh Blueprint specification fulfills this role.

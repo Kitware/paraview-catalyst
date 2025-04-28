@@ -7,18 +7,11 @@ const { Layout } = DefaultTheme
 <template>
   <Layout>
     <template #home-hero-image>
-      <img src="/assets/images/usecase/gallery/warpX.gif" class="hero-video" />
-      <!--
-        <iframe
-            class="hero-video"
-            src="https://player.vimeo.com/video/764741737?h=bd3c37ebfb&title=0&byline=0&portrait=0&muted=1&autoplay=1&loop=1&background=1"
-            frameborder="0"
-            allow="autoplay;"
-            allowfullscreen
-            muted
-        >
-        </iframe>
-      -->
+      <figure>
+      <a href="/paraview-catalyst/usecase/warpx.html"><img src="/assets/images/usecase/gallery/warpX.gif" class="hero-video" /></a>
+      <figcaption> An example of ParaView Catalyst being used in a high-energy physics simulation.
+      </figcaption>
+    </figure>
     </template>
   </Layout>
 </template>

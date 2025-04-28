@@ -33,13 +33,15 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guides', link: '/guide/concepts' },
-      { text: 'Use Cases', link: '/usecase/' },
+      { text: 'Use Cases', link: '/usecase/index' },
       {
         text: 'Resources',
         items: [
-          { text: 'API', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Documentation', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
+          { text: 'Blogs', link: 'https://www.kitware.com/blog/' },
           { text: 'Discussions', link: 'https://discourse.paraview.org/c/in-situ-support' },
-          { text: 'Bugs', link: 'https://gitlab.kitware.com/groups/paraview/-/issues' },
+          { text: 'Issue Tracker', link: 'https://gitlab.kitware.com/groups/paraview/-/issues' },
+          { text: 'Webinars', link: 'https://www.kitware.com/webinars/' },
           { text: 'Services', link: 'https://www.kitware.com/support' },
         ]
       }
@@ -75,21 +77,16 @@ export default defineConfig({
         {
           text: 'Problem Domains',
           items: [
-            { text: 'Hydrodynamics', link: '/usecase/lulesh' },
-            { text: 'Supersonic Turbulence', link: '/usecase/turbulence' },
             { text: 'AI in CFD', link: '/usecase/ai_and_cfd' },
-            { text: 'Deep Learning', link: '/usecase/deep_learning' },
-            { text: 'Ocean Simulation', link: '/usecase/mpaso' },
+            { text: 'Combustion Simulation', link: '/usecase/combustion' },
             { text: 'Cyclonic Simulation', link: '/usecase/cyclonic' },
-            { text: 'High-Energy Physics', link: '/usecase/warpx' }
+            { text: 'Deep Learning', link: '/usecase/deep_learning' },
+            { text: 'High-Energy Physics', link: '/usecase/warpx' },
+            { text: 'Hydrodynamics', link: '/usecase/lulesh' },
+            { text: 'Ocean Simulation', link: '/usecase/mpaso' },
+            { text: 'Supersonic Turbulence', link: '/usecase/turbulence' }
           ]
-        },
-        {
-          text: 'Industry',
-          items: [
-            { text: 'XXX', link: '/usecase/xxx' },
-          ]
-        },
+        }
       ],
     },
     footer: {
