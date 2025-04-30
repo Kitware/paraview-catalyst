@@ -2,36 +2,31 @@
 layout: page
 ---
 
-<table tabindex="0">
-	<thead>
-		<tr>
-			<th><a href="/paraview-catalyst/usecase/warpx.html"><img src="/assets/images/usecase/gallery/warpX2.gif" alt="WarpX Simulation"></a></th>
-			<th><a href="/paraview-catalyst/usecase/mpaso.html">
-				<video control loop autoplay>
-					<source src="/assets/images/usecase/gallery/arctic-viewer-MPAS.mp4" alt="MPAS-O Simulation">
-				</video>
-			</a></th>
-			<th><a href="/paraview-catalyst/usecase/rotor.html">
-				<video control loop autoplay>
-					<source src="/assets/images/usecase/gallery/rotatingwithplane.mp4?t=1744991518881" alt="Rotor Simulation">
-				</video>
-			</a></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><a href="/paraview-catalyst/usecase/cyclonic.html">
-				<video control loop autoplay>
-					<source src="/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
-				</video>
-			</a></td>
-			<td><a href="/paraview-catalyst/usecase/lulesh.html"><img src="/assets/images/usecase/gallery/lulesh.png" alt="LULESH"></a></td>
-			<td><a href="/paraview-catalyst/usecase/turbulence.html"><img src="/assets/images/usecase/gallery/supersonic.png" alt="TURBULENCE"></a></td>
-		</tr>
-		<tr>
-			<td><a href="/paraview-catalyst/usecase/ai_and_cfd.html"><img src="/assets/images/usecase/gallery/unlocking-ai-potential-in-computational-science-2.jpg" alt="AIandCFD"></a></td>
-			<td><a href="/paraview-catalyst/usecase/deep_learning.html"><img src="/assets/images/usecase/gallery/aiflow.png" alt="DeepLearning"></a></td>
-			<td><a href="/paraview-catalyst/usecase/combustion.html"><img src="/assets/images/usecase/gallery/in-situ-analysis-2-1024x875.jpg" alt="Combustion Simulation"></a></td>
-		</tr>
-	</tbody>
-</table>
+<div class="image-flow">
+
+[![WarpX Simulation](/assets/images/usecase/gallery/warpX2.gif)](/usecase/warpx)
+
+<a href="/paraview-catalyst/usecase/mpaso.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/arctic-viewer-MPAS.mp4" alt="MPAS-O Simulation">
+  </video>
+</a>
+
+<a href="/paraview-catalyst/usecase/cyclonic.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
+  </video>
+</a>
+
+[![Combustion Simulation](/assets/images/usecase/gallery/in-situ-analysis-2-1024x875.jpg)](/usecase/combustion)
+
+
+[![TURBULENCE](/assets/images/usecase/gallery/supersonic.png)](/usecase/turbulence)
+
+[![AI and CFD](/assets/images/usecase/gallery/unlocking-ai-potential-in-computational-science-2.jpg)](/usecase/ai_and_cfd)
+
+[![DeepLearning](/assets/images/usecase/gallery/aiflow.png)](/usecase/deep_learning)
+
+[![LULESH](/assets/images/usecase/gallery/lulesh.png)](/usecase/lulesh)
+
+</div>
