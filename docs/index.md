@@ -7,7 +7,7 @@ hero:
   text: "In-situ simulation"
   tagline: "Go beyond your simulation data with ParaView/Catalyst"
   image:
-    src: /assets/images/usecase/gallery/warpX.gif
+    src: warpX.gif
     title: An example of ParaView Catalyst being used in a high-energy physics simulation.
     alt: An example of ParaView Catalyst being used in a high-energy physics simulation.
   actions:
