@@ -12,6 +12,18 @@ layout: page
   </video>
 </a>
 
+<a href="/paraview-catalyst/usecase/rotor.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/rotatingwithplane.mp4" alt="Rotor Simulation">
+  </video>
+</a>
+
+<a href="/paraview-catalyst/usecase/rotor.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/rotatingwithplane2.mp4" alt="Rotor Simulation">
+  </video>
+</a>
+
 <a href="/paraview-catalyst/usecase/cyclonic.html">
   <video control loop autoplay>
     <source src="/assets/images/usecase/gallery/cyclone1.mp4" alt="Cyclone Simulation">
