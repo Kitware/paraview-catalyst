@@ -8,8 +8,8 @@ hero:
   tagline: "Go beyond your simulation data with ParaView/Catalyst"
   image:
     src: /assets/images/usecase/gallery/warpX.gif
-    title: "An example of ParaView Catalyst being used in a high-energy physics simulation."
-    alt: "An example of ParaView Catalyst being used in a high-energy physics simulation."
+    title: An example of ParaView Catalyst being used in a high-energy physics simulation.
+    alt: An example of ParaView Catalyst being used in a high-energy physics simulation.
   actions:
     - theme: brand
       text: What is ParaView/Catalyst?

@@ -4,6 +4,8 @@ layout: page
 
 <div class="image-flow">
 
+[![WarpX Simulation](/assets/images/usecase/gallery/warpX.gif)](/usecase/warpx)
+
 [![WarpX Simulation](/assets/images/usecase/gallery/warpX2.gif)](/usecase/warpx)
 
 <a href="/paraview-catalyst/usecase/mpaso.html">
