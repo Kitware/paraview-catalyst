@@ -6,4 +6,18 @@
 
     --vp-c-brand-1: #2C68C0;
     --vp-c-brand-2: #5DAC41;
+
+      --vp-button-sponsor-border: var(--vp-c-text-2);
+      --vp-button-sponsor-text: var(--vp-c-text-2);
+      --vp-button-sponsor-bg: #b1feba;
+      --vp-button-sponsor-hover-border: var(--vp-c-sponsor);
+      --vp-button-sponsor-hover-text: var(--vp-c-sponsor);
+      --vp-button-sponsor-hover-bg: #b1e9fe;
+      --vp-button-sponsor-active-border: var(--vp-c-sponsor);
+      --vp-button-sponsor-active-text: var(--vp-c-sponsor);
+      --vp-button-sponsor-active-bg: red;
+
+}
+.bg-image {
+    display: none;
 }

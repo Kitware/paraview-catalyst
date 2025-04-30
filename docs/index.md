@@ -6,12 +6,19 @@ hero:
   name: "ParaView/Catalyst"
   text: "In-situ simulation"
   tagline: "Go beyond your simulation data with ParaView/Catalyst"
+  image:
+    src: /assets/images/usecase/gallery/warpX.gif
+    title: "An example of ParaView Catalyst being used in a high-energy physics simulation."
+    alt: "An example of ParaView Catalyst being used in a high-energy physics simulation."
   actions:
     - theme: brand
       text: What is ParaView/Catalyst?
       link: /guide/concepts
     - theme: alt
       text: Quick start
+      link: /guide/getting-started
+    - theme: sponsor
+      text: Upcoming Webinar
       link: /guide/getting-started
 
 features:
@@ -44,4 +51,3 @@ features:
     details: Kitware can help you get started intergrating ParaView Catalyst into your simulation. Our team is here to help.  Please contact us
     link: https://www.kitware.com/support
 ---
-
