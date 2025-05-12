@@ -19,7 +19,7 @@ hero:
       link: /guide/getting-started
     - theme: sponsor
       text: Upcoming Webinar
-      link: /guide/getting-started
+      link: https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/
 
 features:
   - title: In Action

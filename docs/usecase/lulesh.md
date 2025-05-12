@@ -1,7 +1,11 @@
 The Livermore Unstructured Lagrangian Explicit Shock Hydrodynamics (LULESH) code serves as a benchmark for hydrocodes like ALE3D, modeling shock physics using discretized hydrodynamic equations over unstructured meshes. It captures the essential computational patterns and challenges involved in simulating shock wave propagation and high-strain-rate material behavior.
 
-|![Image](/assets/images/usecase/gallery/lulesh.png)|
-|:--:|
+<figure>
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/lulesh.mp4" alt="Lulesh Simulation">
+  </video>
+  <figcaption></figcaption>
+</figure>
 
 Rather than relying on traditional structured grids, LULESH employs an unstructured hexahedral mesh, using indirection arrays to manage mesh topology and element connectivity. This design choice mirrors real-world production codes and introduces the kind of memory access patterns, data dependencies, and parallelism challenges that simulation developers routinely face in high-performance computing environments.
 

@@ -114,4 +114,25 @@ Now lets see what happens if all we do is change the specified script to generat
 ./bin/CxxFullExample $PVSOURCE/Examples/Catalyst2/CxxFullExample/catalyst_pipeline_with_rendering.py
 ```
 
-Now instead of simply showing output on the screen, it has generated images for each time step and placed them in datasets subdirectory of the example’s build directory.
+Now instead of simply showing output on the screen, it has generated images for each time step and placed them in datasets sub-directory of the example’s build directory.  Combining these images together results in the following short video comprising of 5 time-steps.
+
+<figure>
+    <video control autoplay>
+        <source src="/assets/images/guide/concepts/CxxFullRendering.mov" alt="Cxx Example Video">
+    </video>
+    <figcaption>The resulting animation from running the CxxFullExample using the catalyst_pipeline_with_rendering script.</figcaption>
+</figure>
+
+But what if you wanted ParaView Catalyst to extract information from the simulation to be processed further using ParaView?  There is a third script provided in this example that generates VTK information instead.
+
+```bash
+./bin/CxxFullExample $PVSOURCE/Examples/Catalyst2/CxxFullExample/gridwriter.yaml
+```
+
+Now instead of producing images, this script will now generate VTK multi-block (.vtm) files of the extracted time-steps that can then be read back into ParaView.
+
+|![Image](/assets/images/guide/concepts/gridWriterExample.png)|
+|:--:|
+|Result of using the gridwriter input file and loading the generated files into ParaView.|
+
+

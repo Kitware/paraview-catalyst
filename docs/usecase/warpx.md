@@ -1,6 +1,10 @@
-|![GIF](/assets/images/usecase/gallery/warpX2.gif)|
-|:--:|
-|A simulated clump of laser-accelerated electrons hitting a grid of stationary electrons|
+
+<figure>
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/warpX.mp4" alt="WarpX Simulation">
+  </video>
+    <figcaption>A simulated clump of laser-accelerated electrons hitting a grid of stationary electrons</figcaption>
+</figure>
 
 Supercomputing and high-performance computing (HPC) are redefining the frontiers of science and innovation—and the Department of Energy’s Exascale Computing Project (ECP) is at the heart of this transformation. By combining cutting-edge hardware with next-generation software, the ECP is unlocking the ability to explore scientific challenges that were once thought to be out of reach.
 

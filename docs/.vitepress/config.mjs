@@ -38,9 +38,9 @@ export default defineConfig({
         text: 'Resources',
         items: [
           { text: 'Documentation', link: 'https://docs.paraview.org/en/latest/Catalyst/index.html' },
-          { text: 'Blogs', link: 'https://www.kitware.com/blog/' },
+          { text: 'Blogs', link: 'https://www.kitware.com/tag/paraview-catalyst/' },
           { text: 'Discussions', link: 'https://discourse.paraview.org/c/in-situ-support' },
-          { text: 'Issue Tracker', link: 'https://gitlab.kitware.com/groups/paraview/-/issues' },
+          { text: 'Issue Tracker', link: 'https://gitlab.kitware.com/groups/paraview/-/issues/?sort=created_date&state=opened&label_name%5B%5D=area%3Acatalyst&first_page_size=20' },
           { text: 'Webinars', link: 'https://www.kitware.com/webinars/' },
           { text: 'Services', link: 'https://www.kitware.com/support' },
         ]
@@ -54,22 +54,6 @@ export default defineConfig({
           items: [
             { text: 'Concepts', link: '/guide/concepts' },
             { text: 'Getting started', link: '/guide/getting-started' }
-          ]
-        },
-        {
-          text: 'Examples',
-          items: [
-            { text: 'C', link: '/guide/example-c' },
-            { text: 'Fortran 90', link: '/guide/example-fortran' },
-            { text: 'Python', link: '/guide/example-python' },
-            { text: 'C++', link: '/guide/example-cxx' },
-          ]
-        },
-        {
-          text: 'Extract types',
-          items: [
-            { text: 'Images', link: '/guide/example-image' },
-            { text: 'Meshes', link: '/guide/example-mesh' },
           ]
         },
       ],

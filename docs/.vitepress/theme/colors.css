@@ -6,18 +6,15 @@
 
     --vp-c-brand-1: #2C68C0;
     --vp-c-brand-2: #5DAC41;
-
     --gallery-img-height: 250px;
 
-    --vp-button-sponsor-border: var(--vp-c-text-2);
-    --vp-button-sponsor-text: var(--vp-c-text-2);
+/* These settings are for the sponsor theme used in actions */
+    --vp-c-sponsor: #1318B9;
+    --vp-c-text-2: #1318B9;
     --vp-button-sponsor-bg: #b1feba;
-    --vp-button-sponsor-hover-border: var(--vp-c-sponsor);
-    --vp-button-sponsor-hover-text: var(--vp-c-sponsor);
     --vp-button-sponsor-hover-bg: #b1e9fe;
-    --vp-button-sponsor-active-border: var(--vp-c-sponsor);
-    --vp-button-sponsor-active-text: var(--vp-c-sponsor);
-    --vp-button-sponsor-active-bg: red;
+    --vp-button-sponsor-active-bg: #b1feba;
+
 }
 
 .bg-image {
@@ -48,6 +45,19 @@
 }
 
 .image-flow video {
+    max-height: var(--gallery-img-height);
+    max-width: 100%;
+    border-radius: 5px;
+    box-shadow:
+      0 1px 1px hsl(0deg 0% 0% / 0.075),
+      0 2px 2px hsl(0deg 0% 0% / 0.075),
+      0 4px 4px hsl(0deg 0% 0% / 0.075),
+      0 8px 8px hsl(0deg 0% 0% / 0.075),
+      0 16px 16px hsl(0deg 0% 0% / 0.075)
+    ;
+}
+
+.image-flow iframe {
     max-height: var(--gallery-img-height);
     max-width: 100%;
     border-radius: 5px;

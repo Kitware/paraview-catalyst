@@ -1,6 +1,11 @@
-|![Image](/assets/images/usecase/gallery/unlocking-ai-potential-in-computational-science-2.jpg)|
-|:--:|
-|Catalyst is being used to improve the underlying turbulence models with AI/ML. This visualization shows two data extracts, wall distance, and Q-criterion contours colored by velocity magnitude were captured from the PHASTA CFD simulation code running on 256k MPI processes using Catalyst.|
+
+
+<figure>
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/phasta-wingtip.mov" alt="PHASTA Simulation">
+  </video>
+    <figcaption>Catalyst is being used to improve the underlying turbulence models with AI/ML. This visualization shows two data extracts, wall distance, and Q-criterion contours colored by velocity magnitude were captured from the PHASTA CFD simulation code running on 256k MPI processes using Catalyst.</figcaption>
+</figure>
 
 Traditional simulation frameworks—honed over decades—are powerful, precise, and deeply specialized. Their complexity and domain specificity, however, make them difficult to modify, and many researchers remain cautious about introducing AI/ML into these workflows. Concerns about the opacity of “black box” models and the lack of consistent, quantifiable benefits have limited the adoption of AI/ML in computational science, where transparency and reproducibility are critical.
 

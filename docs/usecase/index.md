@@ -4,9 +4,11 @@ layout: page
 
 <div class="image-flow">
 
-[![WarpX Simulation](/assets/images/usecase/gallery/warpX.gif)](/usecase/warpx)
-
-[![WarpX Simulation](/assets/images/usecase/gallery/warpX2.gif)](/usecase/warpx)
+<a href="/paraview-catalyst/usecase/warpx.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/warpX.mp4" alt="WarpX Simulation">
+  </video>
+</a>
 
 <a href="/paraview-catalyst/usecase/mpaso.html">
   <video control loop autoplay>
@@ -37,10 +39,18 @@ layout: page
 
 [![TURBULENCE](/assets/images/usecase/gallery/supersonic.png)](/usecase/turbulence)
 
-[![AI and CFD](/assets/images/usecase/gallery/unlocking-ai-potential-in-computational-science-2.jpg)](/usecase/ai_and_cfd)
+<a href="/paraview-catalyst/usecase/ai_and_cfd.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/phasta-wingtip.mov" alt="PHASTA Simulation">
+  </video>
+</a>
 
 [![DeepLearning](/assets/images/usecase/gallery/aiflow.png)](/usecase/deep_learning)
 
-[![LULESH](/assets/images/usecase/gallery/lulesh.png)](/usecase/lulesh)
+<a href="/paraview-catalyst/usecase/lulesh.html">
+  <video control loop autoplay>
+    <source src="/assets/images/usecase/gallery/lulesh.mp4" alt="Lulesh Simulation">
+  </video>
+</a>
 
 </div>
