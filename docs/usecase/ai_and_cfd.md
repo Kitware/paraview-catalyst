@@ -1,4 +1,4 @@
-
+# Using ParaView Catalyst as a Bridge Between Simulation and AI in CFD
 
 <figure>
   <video control loop autoplay>

@@ -1,3 +1,5 @@
+# Using ParaView Catalyst in Ocean Simulations
+
 MPAS-Ocean is a state-of-the-art ocean modeling system developed by the COSIM project at Los Alamos National Laboratory, built to simulate ocean dynamics across vast temporal and spatial scales—from sub-kilometer coastal processes to global circulations, and from seasonal trends to millennial climate patterns. This level of range and resolution makes MPAS-Ocean a vital tool for advancing our understanding of ocean behavior and its role in Earth’s climate system.
 
 <figure>

@@ -1,3 +1,5 @@
+# Using ParaView Catalyst in Rotorcraft Simulations
+
 Rotorcraft simulations—such as those modeling helicopters—are among the most challenging in computational fluid dynamics (CFD) due to their inherently unsteady, vortex-dominated flow environments. As rotor blades rotate, they interact with their own wakes, leading to highly cyclic behavior that complicates both analysis and setup. Analysts must contend with additional nonlinearities such as reverse flow, compressibility effects, yawed inflow, and persistent flow separation. These complexities make it especially difficult to specify accurate initial conditions, often requiring multiple blade revolutions before transient effects decay and meaningful results can be extracted.
 
 <figure>

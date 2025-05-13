@@ -1,3 +1,5 @@
+# Using ParaView Catalyst in Training Deep Learning Workflows
+
 Surrogate models offer a powerful way to approximate the output of complex numerical solvers at a fraction of the computational cost—making them ideal for real-time applications where traditional solvers fall short. Simulations based on partial differential equations, such as those using finite element or finite volume methods, often require extensive computation times, making them impractical for use in dynamic environments like control systems or digital twins.
 
 <figure>

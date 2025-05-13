@@ -68,7 +68,8 @@ export default defineConfig({
             { text: 'High-Energy Physics', link: '/usecase/warpx' },
             { text: 'Hydrodynamics', link: '/usecase/lulesh' },
             { text: 'Ocean Simulation', link: '/usecase/mpaso' },
-            { text: 'Supersonic Turbulence', link: '/usecase/turbulence' }
+            { text: 'Supersonic Turbulence', link: '/usecase/turbulence' },
+            { text: 'Rotorcraft Simulation', link: '/usecase/rotor' }
           ]
         }
       ],

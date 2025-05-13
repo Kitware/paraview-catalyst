@@ -1,3 +1,5 @@
+# Using ParaView Catalyst in Internal Combustion Simulations
+
 Simulating internal combustion engines requires capturing fast, complex physical events—especially phenomena like autoignition, which can lead to damaging engine knock. Knock occurs when combustion initiates at unintended times or locations, potentially degrading engine performance or causing failure. While pressure traces from simulations can reveal when knock occurs, understanding why it happens—by identifying the precise thermodynamic conditions leading up to autoignition—demands high-frequency data capture, which traditionally results in large outputs and long simulation times.
 
 |![Image](/assets/images/usecase/gallery/in-situ-analysis-2-1024x875.jpg)|

@@ -27,14 +27,14 @@ features:
       src: /logos/favicon-196x196.png
       alt: Pure Python
       width: 28
-    details: ParaView Catalyst has powered visualization across an impressive spectrum of scientific and engineering domains—from the subatomic world of High-Energy Physics to the complex flows of Computational Fluid Dynamics. 
+    details: ParaView Catalyst has powered visualization across an impressive spectrum of scientific and engineering domains—from the subatomic world of High-Energy Physics to the complex flows of Computational Fluid Dynamics.
     link: /usecase/
   - title: ParaView
     icon:
       src: /logos/paraview-icon.png
       alt: ParaView
       width: 28
-    details: At the core of ParaView Catalyst lies ParaView itself—an award-winning, state-of-the-art platform for scientific visualization and analysis. ParaView seamlessly adapts to a wide range of computational environments, from lightweight laptops to the world’s most powerful exascale supercomputers. 
+    details: At the core of ParaView Catalyst lies ParaView itself—an award-winning, state-of-the-art platform for scientific visualization and analysis. ParaView has been shown to scale to thousands of parallel processors and supports a wide range of computational environments, from lightweight laptops to the world’s most powerful exascale supercomputers.
     link: https://www.paraview.org/
   - title: Open Source
     icon:

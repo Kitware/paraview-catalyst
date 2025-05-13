@@ -1,3 +1,4 @@
+# Using ParaView Catalyst in Weather Research and Forecasting Workflows
 
 Cyclone Chapala, one of the most powerful tropical cyclones ever recorded in the Arabian Sea, struck in 2015 with sustained wind speeds reaching 240 km/h (150 mph), causing over $100 million in damage across Yemen, Oman, and Somalia. In an effort to better understand such extreme weather events and improve future forecasting, researchers at King Abdullah University of Science and Technology (KAUST) developed a high-resolution Weather Research and Forecasting (WRF) model to simulate the cyclone’s behavior in detail.
 

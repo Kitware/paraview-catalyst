@@ -1,3 +1,4 @@
+# Using ParaView Catalyst in High Energy Physics Simulations
 
 <figure>
   <video control loop autoplay>
