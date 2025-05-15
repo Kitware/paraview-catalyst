@@ -214,7 +214,7 @@ Now instead of simply showing output on the screen, it has generated images for 
 __Note:__ If you compare this input file with the one used previously you will notice that the only difference is the Python script being used.  All of the rest of the information is the same.
 
 <figure>
-    <video control autoplay>
+    <video controls autoplay>
         <source src="/assets/images/guide/concepts/CxxFullRendering.mov" alt="Cxx Example Video">
     </video>
     <figcaption>The resulting animation from running the CxxFullExample using the catalyst_pipeline_with_rendering script.</figcaption>
