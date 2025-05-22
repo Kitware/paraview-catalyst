@@ -92,6 +92,15 @@ Lets start with running a simple pipeline that simply inspects the data being pa
 }
 ```
 
+The file describes the structure of two Conduit nodes:
+
+* catalyst node which specifies the following:
+  * Name of the Catalyst Python script that should be applied to the data being sent from the simulation/data generator(which is located in the $PVSOURCE/Examples/Catalyst2/CxxFullExample source directory).
+  * Python path for wrapped libraries for Catalyst itself.  Note that this is only needed if your Python script calls Catalyst functions with this script does call.
+* catalyst_load node which specifies the following:
+  * Catalyst implementation to be used - this specifies the Catalyst back-end to be used.  In this case we are using the ParaView Catalyst back-end.
+  * Search Path - for the specified backend you need to indicate where the shared libaries are located.
+
 Here is a corresponding YAML version of the file that specifies the exact same information:
 
 ```yaml
@@ -110,14 +119,6 @@ Here is a corresponding YAML version of the file that specifies the exact same i
       paraview: "/Users/bob.obara/Projects/Kitware/Builds/ParaView_noQt_XC16.2_CM3.31.6/lib/catalyst"
 
 ```
-The file describes the structure of two Conduit nodes:
-
-* catalyst node which specifies the following:
-  * Name of the Catalyst Python script that should be applied to the data being sent from the simulation/data generator(which is located in the $PVSOURCE/Examples/Catalyst2/CxxFullExample source directory).
-  * Python path for wrapped libraries for Catalyst itself.  Note that this is only needed if your Python script calls Catalyst functions with this script does call.
-* catalyst_load node which specifies the following:
-  * Catalyst implementation to be used - this specifies the Catalyst back-end to be used.  In this case we are using the ParaView Catalyst back-end.
-  * Search Path - for the specified backend you need to indicate where the shared libaries are located.
 
 Now lets run the example with this input file:
 
