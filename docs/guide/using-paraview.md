@@ -68,7 +68,7 @@ As in the case of saving the generated 3D information these will be  written out
 
 ## Step 6 - Saving the ParaView Catalyst Script
 
-Next you will need to save the pipeline you have created as a ParaView Catalyst state Python file that will be used a the script to process the simulation's data in situ.
+Next you will need to save the pipeline you have created as a ParaView Catalyst state Python file that will be used as the script to process the simulation's data in situ.
 
 <figure>
     <video controls>
@@ -85,7 +85,7 @@ Next you will need to save the pipeline you have created as a ParaView Catalyst 
 
 Now lets run the simulation and examines the following:
  * The generated line plots images
- * The generated images of the the 3D data
+ * The generated images of the 3D data
 
 <figure>
     <video controls>
