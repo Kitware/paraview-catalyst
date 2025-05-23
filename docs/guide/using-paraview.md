@@ -6,6 +6,19 @@ In the __Getting Started Section__, the Catalyst scripts were already created fo
 
 If you built your own ParaView from source (perhaps as part of doing the __Getting Started Example__), you will need to make sure to **not** configure your ParaView Build with the "-DPARAVIEW_BUILD_QT_GUI=OFF" option and instead you will need to make sure you have installed QT on your system (See [here](https://gitlab.kitware.com/paraview/paraview/-/blob/master/Documentation/dev/build.md) for more details).  Else you can download a ParaView release from [here](https://www.paraview.org/download/)
 
+## Step 0 - Setup simulation
+For this example, we will be using the Lulesh proxy application which we have already instrumented with catalyst.
+To compile the simulation code:
+
+```bash
+git clone https://gitlab.kitware.com/christos.tsolakis/lulesh-catalyst.git
+mkdir build
+cmake -GNinja -DWITH_MPI=TRUE -DWITH_CATALYST=TRUE -Dcatalyst_DIR=<installation path of catalyst>/lib/cmake/catalyst-2.0
+ninja
+```
+
+
+
 ## Step 1 - Loading in Sample Data
 The first step in the process will be to use some sample data that best represents the structure and fields that ParaView Catalyst will be dealing with.  This could be a result from a previous simulation run.  When loading in the data into ParaView it is important that the name of the source matches that name of the Catalyst Channel being used.  If it does not, make sure to rename it in the ParaView session.  In the case of this example, the name of the Catalyst Channel is **grid**.  The video below shows how to do the following:
 
@@ -79,7 +92,15 @@ Next you will need to save the pipeline you have created as a ParaView Catalyst 
 
 ## Step 7 - Prepping the Simulation
 
-(NEED TO BE DONE)
+Back to the build directory of the simulation we setup the environment and run the simulation:
+```bash
+export CATALYST_IMPLEMENTATION_NAME=paraview
+export CATALYST_IMPLEMENTATION_PATHS=<paraview build directory>/lib/catalyst
+mpiexec -np 8 ./lulesh2.0 -x lulest_state.py -p -i 1000 -s 50
+```
+
+The simulation will run for a 1000 steps but you can stop it earlier.
+
 
 ## Step 8 - Running the Simulation and Reviewing the Generated Files
 
