@@ -79,6 +79,9 @@ export default defineConfig({
         }
       ],
     },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/Kitware/paraview-catalyst' },
+    ],
     footer: {
       copyright: 'Copyright © 2025 Kitware Inc.'
     }
