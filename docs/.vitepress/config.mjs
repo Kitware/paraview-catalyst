@@ -24,6 +24,10 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+   editLink: {
+      pattern: 'https://github.com/Kitware/paraview-catalyst/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
     search: {
       provider: 'local'
     },
