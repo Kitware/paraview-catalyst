@@ -24,6 +24,10 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+   editLink: {
+      pattern: 'https://github.com/Kitware/paraview-catalyst/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
     search: {
       provider: 'local'
     },
@@ -75,6 +79,9 @@ export default defineConfig({
         }
       ],
     },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/Kitware/paraview-catalyst' },
+    ],
     footer: {
       copyright: 'Copyright © 2025 Kitware Inc.'
     }
