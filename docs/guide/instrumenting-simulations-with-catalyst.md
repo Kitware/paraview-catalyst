@@ -1,26 +1,38 @@
 # Instrumenting Simulations with Catalyst
 
-For this example we will start with a simulation code and step by step instrument it with catalyst.
-As an example we will be using Lulesh, Livermore Unstructured Lagrangian Explicit Shock Hydrodynamics code that
-can be used for modeling shock physics using discretized hydrodynamic equations over unstructured meshes.
+The first step in using ParaView Catalyst (or any Catalyst-based back-end) is the instrumentation of your simulation code.  In this guide will walk you through the instrumentation process using [LULESH](https://asc.llnl.gov/codes/proxy-apps/lulesh) (Livermore Unstructured Lagrangian Explicit Shock Hydrodynamics) code that can be used for modeling shock physics using discretized hydrodynamic equations over unstructured meshes.
 
 ## Environment Setup
-Make sure you have installed:
+Before you begin, make sure you have installed the following on your system:
  - git
- - cmake
+- [CMake](https://cmake.org/download/) 3.13 or later- for managing the build process used by both Catalyst and ParaView
+- [Ninja](https://ninja-build.org) - build system tool.  Not required but highly recommended.
+- [MPI](https://www.open-mpi.org) - optional
  - A c++ compiler
 
-## 0. Compile and install the catalyst library.
-Get and Compile the catalyst library. This simulation will link to this library.
+## Compiling Catalyst
+Get and Compile the catalyst library. This simulation will link to this library. Please see [here](getting-started.md#building-catalyst) for details.
 
-```bash
-git https://gitlab.kitware.com/paraview/catalyst.git
-cmake -S catalyst -B build-catalyst -DCMAKE_INSTALL_PREFIX=./install-catalyst
-cmake --build build-catalyst -j8
-cmake --install build-catalyst
-```
 
-## 1. Get Lulesh and compile basic application
+## Understanding the simulation's data
+
+Before we begin to modify the simulation, we first have to understand the data the simulation generates in terms of its structure.  In the case of LULESH, the geometric domain itself is a three dimensional structured grid that consists of sets of scalar and vector files applied to either nodes or elements as shown in the table below:
+
+|Field Name  | Representation | Assignment |
+|------------|----------------|------------|
+| Energy (e)| scalar| element|
+| Pressure (p)| scalar|element|
+| Artificial Viscosity (q)| scalar | element|
+| Relative Volume (v)| scalar | element |
+| Sound Speed (ss)| scalar | element|
+| Element Mass (elemMass) | scalar | element |
+| Nodal Mass (nodalMass) | scalar | node |
+| Velocity (velocity) | vector | node |
+| Acceleration (acceleration) | vector | node |
+| Force (force) | vector | node |
+
+
+## Getting and compiling LULESH
 
 Get and compile the code:
 ```bash
@@ -31,7 +43,7 @@ cd build-lulesh
 ./lulesh2.0 -h
 ```
 
-Lulesh uses a cube domain. Let's run the simulation for a domain of size
+LULESH uses a cubical domain. Let's run the simulation for a domain of size
 10x10x10 (`-s 10`) for 30 iterations (`-i 30`) and show progress (`-p`),
 ```bash
 ./lulesh2.0 -s 10 -i 30 -p
@@ -58,26 +70,18 @@ Grind time (us/z/c)  =  2.8304667 (per dom)  (  0.084914 overall)
 FOM                  =  353.29863 (z/s)
 ```
 
-## 2. Skeleton code 
-:::
+## Creating the catalyst adapter
 
-::: tip NOTE
+
 Instrumenting catalyst requires at least 3 calls.
-- `catalyst_initialize` 
-	1. Called once at the start of execution
-	2. Sets up backend implementation
-  3. Initializes pipelines
-- `catalyst_execute`
-	1. Called every timestep
-	2. Passes data and metadata to pipelines
-- `catalyst_finalize`
-	1. Called once at the end of execution
-	2. Cleans up the pipeline
 
-:::
+|![Image](/assets/images/guide/concepts/catalyst_functions.jpg)|
+|:--:|
+|The three main Catalyst functions a simulation must provide.|
 
 
-Let's add a new file that will hold the code of these three methods and update our `CMakeLists.txt` file.
+Let's add a new file called `lulesh-catalyst.cc` that will hold these three methods and update our `CMakeLists.txt` file.
+
 `lulesh-catalyst.cc:`
 ```cpp
 #include <iostream>
@@ -107,7 +111,7 @@ void FinalizeCatalyst();
 ```
 
 
-Update `CMakeLists.txt`:
+Updated `CMakeLists.txt`:
 
 ```diff
  set(LULESH_SOURCES
@@ -117,9 +121,9 @@ Update `CMakeLists.txt`:
    lulesh-util.cc
 ```
 
-## 3. Identifying instrumentation locations
-Let's now identify the proper spots for these calls.
-First add `lulesh-catalyst.h` to `lulesh.h` so it is available to the application.
+## Where to call Catalyst
+The next step is to determine  the proper locations in LULESH for these calls.
+Lets start by including  `lulesh-catalyst.h` to `lulesh.h` so it is available to the simulation.
 
 ```diff
  #include <stdint.h>
@@ -128,14 +132,14 @@ First add `lulesh-catalyst.h` to `lulesh.h` so it is available to the applicatio
 +#include "lulesh-catalyst.h"
 ```
 
-### `catalyst_initialize`
+### Initializing Catalyst
 For `InitializeCatalyst` we need to pick a spot early in the program execution.
-Preferably after the initialization of the simulation and the argument parsing
-as this allows to pass any extra arguments to catalyst.
+Preferably this should be after  the initialization and argument parsing of the simulation.
+This  will allow us to pass any extra arguments to catalyst's initialization.
 
-`main()` is located around line 2650 of `lulesh.cc`  
+`main()` is located around line 2650 of `lulesh.cc`
 
-We can add `InitializeCatalyst` after the creation of the computational domain of the application.
+We will add `InitializeCatalyst` after the creation of the computational domain of the simulation.
 
 ```diff
 @@ -2715,7 +2715,8 @@ int main(int argc, char *argv[])
@@ -145,10 +149,9 @@ We can add `InitializeCatalyst` after the creation of the computational domain o
 +   InitializeCatalyst();
 ```
 
-### `catalyst_finalize`
+### Finalizing Catalyst
 Following the same approach we need to add `FinalizeCatalyst` at a spot late in
-the application before finalizing MPI.  For symmetry we add it right before we
-delete `locDom` in `lulesh.cc`
+the simulation before the solver begins to free critical memory.  For symmetry we add it right before the deletion of the `locDom` in `lulesh.cc`
 
 
 ```diff
@@ -161,9 +164,9 @@ delete `locDom` in `lulesh.cc`
 ```
 
 
-### `catalyst_execute`
+### Catalyst Execution
 
-Finding the perfect spot of the `ExecuteCatalyst` call depends heavily on the application. In general, we start by identifying the main loop of the simulation that advances the simulation time.
+Finding the proper spot to call `ExecuteCatalyst`  depends heavily on the simulation. In general, we start by identifying the main loop of the simulation that advances the simulation time.
 
 In this example, the simulation loop in around line 2745 of `lulesh.cc` file.
 
@@ -177,7 +180,9 @@ In this example, the simulation loop in around line 2745 of `lulesh.cc` file.
     }
 ```
 
-Re-compile the application and rerun using the same arguments.
+### Testing the first Catalyst Instrumentation
+Re-compile the simulation and rerun using the same arguments.  In this version you should see the printouts we added in the Catalyst instrumentation routines showing up in LULESH's output as shown below.
+
 Expected output:
 ```bash
 $ ./lulesh2.0 -s 10 -i 30 -p
@@ -216,9 +221,8 @@ FOM                  =  413.87873 (z/s)
 FinalizeCatalyst
 ```
 
-Before we end this step, we will add a new build option that enables/disables
-the use of catalyst making thus catalyst and optional dependency to the
-simulation:
+### One more change
+Before we move on to the next example, it is good practice to add a new build option that enables/disables the use of Catalyst allowing the Catalyst instrumentation optional w/r the simulation code.  First we should create 2 versions of the 3 main Catalyst functions.  The original set that we will next expand with additional functionality and the second set consisting on empty bodies which will be used when not using Catalyst.  We will use an *ifdef* condition to switch between the two at compile time.
 
 `lulesh-catalyst.cc`
 ```diff
@@ -246,6 +250,7 @@ simulation:
 +#endif
 ```
 
+Next we will update the CMake file to allow the user to turn on/off the Catalyst support.
 `CMakeLists.txt`
 ```diff
 @@ -5,6 +5,7 @@ project(LULESH CXX)
@@ -268,7 +273,7 @@ simulation:
 +endif()
 ```
 
-Make sure to reconfigure with catalyst enabled:
+Now when we reconfigure LULESH would now use the following cmake command which will enable Catalyst support: 
 ```bash
 cmake -S LULESH -B build-lulesh -DWITH_CATALYST=1 
 ```
@@ -316,9 +321,9 @@ In this step, we will replace the placeholder implementation of this call with t
 
 For this example we will pass only the script(s) and define  everything else via environmental variables.
 
-( TODO show the new json way ?) 
+( TODO show the new json way ?)
 
-So, we need to add an argument in the application to pass the script(s). Here are the required changes:
+So, we need to add an argument in the simulation's command line to pass the script(s). Here are the required changes:
 
 `lulesh.h`:
 ```diff
