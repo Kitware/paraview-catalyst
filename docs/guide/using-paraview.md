@@ -1,6 +1,6 @@
 # Using ParaView to Create the ParaView Catalyst Script
 
-In the __Getting Started Section__, the Catalyst scripts were already created for you to use.  In this example, we will go through the process of creating a ParaView Catalyst script and demonstrate its use. Though you can directly create ParaVire Catalyst scripts using a text editor, this example will be using the ParaView Application to generate the script.
+In the [Getting Started Section](getting-started), the Catalyst scripts were already created for you to use.  In the [Instrumenting the Simulation with Catalyst Section](instrumenting-simulations-with-catalyst), we instrumented the LULESH simulation with Catalyst. In this example, we will go through the process of creating a ParaView Catalyst script and demonstrate its use using the instrumented LULESH. Though you can directly create ParaVire Catalyst scripts using a text editor, this example will be using the ParaView Application to generate the script.
 
 ## Getting ParaView
 

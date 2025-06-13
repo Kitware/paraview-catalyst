@@ -58,7 +58,8 @@ export default defineConfig({
           items: [
             { text: 'Concepts', link: '/guide/concepts' },
             { text: 'Getting started', link: '/guide/getting-started' },
-            { text: 'Using ParaView to create Catalyst scripts', link: '/guide/using-paraview' }
+            { text: 'Instrumenting an application with  ParaViewCatalyst', link: '/guide/instrumenting-simulations-with-catalyst' },
+            { text: 'Using ParaView to create Catalyst scripts', link: '/guide/using-paraview' },
           ]
         },
       ],

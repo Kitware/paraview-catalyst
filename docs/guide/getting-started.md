@@ -3,7 +3,7 @@
 ## Prerequisites
 
 Building ParaView Catalyst will require the following libraries/tools:
-- [CMake](https://cmake.org/download/) - for managing the build process used by both Catalyst and ParaView
+- [CMake](https://cmake.org/download/) 3.13 or later - for managing the build process used by both Catalyst and ParaView
 - [NumPy](https://numpy.org) - used by Catalyst when dealing with Python wrapping
 - [MPI](https://www.open-mpi.org)
 - [Ninja](https://ninja-build.org) - build system tool.  Not required but highly recommended.
@@ -16,15 +16,17 @@ Note to Mac developers: All of the above software is available using Homebrew.
 
 The first step is to build the Catalyst library that will provide the means of representing the data that can then be processed by various consumer implementations such as ParaView Catalyst.  This is also the library that you will be using within your code so that you can pass the relevant information to the various Catalyst implementations.
 
-You can find the basic build instructions for Catalyst [here](https://catalyst-in-situ.readthedocs.io/en/latest/build_and_install.html).
+You can find the basic build instructions for Catalyst [here](https://catalyst-in-situ.readthedocs.io/en/latest/build_and_install.html) which includes how to checkout the Catalyst source.
 
 You can use the following commands  to configure and build Catalyst with MPI and Python Wrapping which we will need for the ParaView Catalyst Examples:
 
 ```bash
-mkdir [name of Catalyst Build Directory]
-cd  [name of Catalyst Build Directory]
-ccmake -G Ninja -DCATALYST_USE_MPI=ON -DCATALYST_WRAP_PYTHON=ON [path to the Catalyst Source Directory]
-cmake --build .
+# The following exports are used for convenience
+export CATALYSTSRC=[the path to where you checked-out Catalyst's source]
+export CATALYSTBUILD=[the path to the Catalyst build directory]
+
+cmake -S $CATALYSTSRC -B $CATALYSTBUILD
+cmake --build $CATALYSTBUILD
 ```
 
 __Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).
