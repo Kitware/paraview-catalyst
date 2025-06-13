@@ -35,9 +35,10 @@ Before we begin to modify the simulation, we first have to understand the data t
 ## Getting and compiling LULESH
 
 Get and compile the code:
+<!-- TODO  remove --branch and use repository under /paraview once paraview/catalyst-examples!4 is merged -->
 ```bash
-git clone https://github.com/LLNL/LULESH.git
-cmake -S LULESH -B build-lulesh -DWITH_OPENMP=0 -DWITH_MPI=0
+git clone https://gitlab.kitware.com/christos.tsolakis/catalyst-examples.git --branch lulesh-tutorial
+cmake -S LULESH -B build-lulesh -DWITH_MPI=0
 cmake --build build-lulesh
 cd build-lulesh
 ./lulesh2.0 -h
