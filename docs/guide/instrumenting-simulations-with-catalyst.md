@@ -143,20 +143,20 @@ This  will allow us to pass any extra arguments to catalyst's initialization.
 We will add `InitializeCatalyst` after the creation of the computational domain of the simulation.
 
 ```diff
-@@ -2715,7 +2715,8 @@ int main(int argc, char *argv[])
     locDom = new Domain(numRanks, col, row, plane, opts.nx,
                         side, opts.numReg, opts.balance, opts.cost) ;
-+
+ 
 +   InitializeCatalyst();
 ```
 
 ### Finalizing Catalyst
+
 Following the same approach we need to add `FinalizeCatalyst` at a spot late in
-the simulation before the solver begins to free critical memory.  For symmetry we add it right before the deletion of the `locDom` in `lulesh.cc`
+the simulation before the solver begins to free critical memory.  For symmetry
+we add it right before the deletion of the `locDom` in `lulesh.cc`.
 
 
 ```diff
-@@ -2782,6 +2782,7 @@ int main(int argc, char *argv[])
        VerifyAndWriteFinalOutput(elapsed_timeG, *locDom, opts.nx, numRanks);
     }
 
@@ -172,13 +172,20 @@ Finding the proper spot to call `ExecuteCatalyst`  depends heavily on the simula
 In this example, the simulation loop in around line 2745 of `lulesh.cc` file.
 
 ```diff
-@@ -2754,6 +2754,8 @@ int main(int argc, char *argv[])
-                    << "dt="     << double(locDom->deltatime()) << "\n";
-          std::cout.unsetf(std::ios_base::floatfield);
-       }
-+
+   while((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its)) {
+
+      TimeIncrement(*locDom) ;
+      LagrangeLeapFrog(*locDom) ;
+
+      if ((opts.showProg != 0) && (opts.quiet == 0) && (myRank == 0)) {
+         std::cout << "cycle = " << locDom->cycle()       << ", "
+                   << std::scientific
+                   << "time = " << double(locDom->time()) << ", "
+                   << "dt="     << double(locDom->deltatime()) << "\n";
+         std::cout.unsetf(std::ios_base::floatfield);
+      }
 +      ExecuteCatalyst();
-    }
+   }
 ```
 
 ### Testing the first Catalyst Instrumentation
@@ -225,17 +232,13 @@ FinalizeCatalyst
 ### One more change
 Before we move on to the next example, it is good practice to add a new build option that enables/disables the use of Catalyst allowing the Catalyst instrumentation optional w/r the simulation code.  First we should create 2 versions of the 3 main Catalyst functions.  The original set that we will next expand with additional functionality and the second set consisting on empty bodies which will be used when not using Catalyst.  We will use an *ifdef* condition to switch between the two at compile time.
 
-`lulesh-catalyst.cc`
+`lulesh-catalyst.cc`:
 ```diff
-@@ -1,3 +1,4 @@
 +#ifdef VIZ_CATALYST
  #include <iostream>
  void InitializeCatalyst()
- {
-@@ -13,3 +14,16 @@ void FinalizeCatalyst()
- {
-   std::cerr << "FinalizeCatalyst" << std::endl;
- }
+ ...
+
 +#else
 +void InitializeCatalyst()
 +{
@@ -254,7 +257,7 @@ Before we move on to the next example, it is good practice to add a new build op
 Next we will update the CMake file to allow the user to turn on/off the Catalyst support.
 `CMakeLists.txt`
 ```diff
-@@ -5,6 +5,7 @@ project(LULESH CXX)
+ project(LULESH CXX)
  option(WITH_MPI    "Build LULESH with MPI"          TRUE)
  option(WITH_OPENMP "Build LULESH with OpenMP"       TRUE)
  option(WITH_SILO   "Build LULESH with silo support" FALSE)
@@ -262,7 +265,8 @@ Next we will update the CMake file to allow the user to turn on/off the Catalyst
 
  if (WITH_MPI)
    find_package(MPI REQUIRED)
-@@ -54,3 +55,10 @@ set(LULESH_EXEC lulesh2.0)
+
+...
 
  add_executable(${LULESH_EXEC} ${LULESH_SOURCES})
  target_link_libraries(${LULESH_EXEC} ${LULESH_EXTERNAL_LIBS})
@@ -284,10 +288,6 @@ Before populating the catalyst calls let's link the simulation to the catalyst l
 First, update `CMakeLists.txt`:
 
 ```diff
-@@ -43,6 +43,10 @@ if (WITH_SILO)
-   endif()
- endif()
-
 +if (WITH_CATALYST)
 +  find_package(catalyst REQUIRED)
 +endif()
@@ -295,7 +295,8 @@ First, update `CMakeLists.txt`:
  set(LULESH_SOURCES
    lulesh-catalyst.cc
    lulesh-comm.cc
-@@ -57,6 +61,8 @@ add_executable(${LULESH_EXEC} ${LULESH_SOURCES})
+...
+
  target_link_libraries(${LULESH_EXEC} ${LULESH_EXTERNAL_LIBS})
 
  if(WITH_CATALYST)
@@ -322,13 +323,14 @@ In this step, we will replace the placeholder implementation of this call with t
 
 For this example we will pass only the script(s) and define  everything else via environmental variables.
 
-( TODO show the new json way ?)
+<!-- ( TODO show the new json way ?) -->
 
 So, we need to add an argument in the simulation's command line to pass the script(s). Here are the required changes:
 
 `lulesh.h`:
 ```diff
-@@ -608,6 +608,9 @@ struct cmdLineOpts {
+struct cmdLineOpts {
+...
     Int_t viz; // -v
     Int_t cost; // -c
     Int_t balance; // -b
@@ -340,7 +342,6 @@ So, we need to add an argument in the simulation's command line to pass the scri
 
 `lulesh-util.cc`:
 ```diff
-@@ -43,6 +43,7 @@ static void PrintCommandLineOptions(char *execname, int myRank)
        printf(" -f <numfiles>   : Number of files to split viz dump into (def: (np+10)/9)\n");
        printf(" -p              : Print out progress\n");
        printf(" -v              : Output viz file (requires compiling with -DVIZ_MESH\n");
@@ -349,20 +350,21 @@ So, we need to add an argument in the simulation's command line to pass the scri
        printf("\n\n");
     }
 ```
-```diff
-@@ -151,6 +152,15 @@ void ParseCommandLineOptions(int argc, char *argv[],
- #endif
+```cpp
+void ParseCommandLineOptions(int argc, char *argv[],
+...
              i++;
           }
-+         /* -x */
-+         else if (strcmp(argv[i], "-x") == 0) {
-+#if VIZ_CATALYST
-+             opts->scripts.push_back(argv[i+1]);
-+#else
-+             ParseError("Use of -x requires compiling with Catalyst support.", myRank);
-+#endif
-+            i+=2;
-+         }
+          // new option
+         /* -x */
+         else if (strcmp(argv[i], "-x") == 0) {
+#if VIZ_CATALYST
+             opts->scripts.push_back(argv[i+1]);
+#else
+             ParseError("Use of -x requires compiling with Catalyst support.", myRank);
+#endif
+            i+=2;
+         }
           /* -h */
           else if (strcmp(argv[i], "-h") == 0) {
              PrintCommandLineOptions(argv[0], myRank);
@@ -372,7 +374,6 @@ Next we update `InitializeCatalyst` definition to accept `cmdLineOpts` as an arg
 
 `lulesh-catalyst.cc`:
 ```diff
-@@ -1,6 +1,8 @@
 +#include "lulesh-catalyst.h"
  #ifdef VIZ_CATALYST
  #include <iostream>
@@ -382,19 +383,13 @@ Next we update `InitializeCatalyst` definition to accept `cmdLineOpts` as an arg
  {
    std::cerr << "InitializeCatalyst" << std::endl;
  }
-@@ -15,7 +17,7 @@ void FinalizeCatalyst()
-   std::cerr << "FinalizeCatalyst" << std::endl;
- }
  #else
 -void InitializeCatalyst()
 +void InitializeCatalyst(const cmdLineOpts& opts)
- {
- }
  ```
 
 `lulesh-catalyst.h`:
 ```diff
-@@ -1,6 +1,7 @@
  #ifndef LULESH_CATALYST_H
  #define LULESH_CATALYST_H
 -void InitializeCatalyst();
@@ -409,7 +404,6 @@ Next we update `InitializeCatalyst` definition to accept `cmdLineOpts` as an arg
 
 `lulesh.cc`:
 ```diff
-@@ -2715,7 +2715,7 @@ int main(int argc, char *argv[])
     locDom = new Domain(numRanks, col, row, plane, opts.nx,
                         side, opts.numReg, opts.balance, opts.cost) ;
 
@@ -422,63 +416,61 @@ Make sure the code compiles with no issues.
 We are now ready to write the actual implementation
 
 `lulesh-catalyst.cc`:
-```diff
-@@ -3,9 +3,23 @@
- #include "lulesh.h"
- #include <iostream>
+```cpp
+#include "lulesh.h"
+#include <iostream>
 
-+#include <catalyst.hpp>
-+#include <catalyst_conduit.hpp>
-+
- void InitializeCatalyst(const cmdLineOpts& opts)
- {
--  std::cerr << "InitializeCatalyst" << std::endl;
-+  conduit_cpp::Node node;
-+  for (size_t cc=0; cc < opts.scripts.size(); ++cc)
-+  {
-+    conduit_cpp::Node list_entry = node["catalyst/scripts/script_" + std::to_string(cc)].append();
-+    list_entry.set(opts.scripts[cc]);
-+  }
-+
-+  catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
-+  if (err != catalyst_status_ok)
-+  {
-+    std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
-+  }
- }
- ```
+#include <catalyst.hpp>
+#include <catalyst_conduit.hpp>
+
+void InitializeCatalyst(const cmdLineOpts& opts)
+{
+  conduit_cpp::Node node;
+  for (size_t cc=0; cc < opts.scripts.size(); ++cc)
+  {
+    conduit_cpp::Node list_entry = node["catalyst/scripts/script_" + std::to_string(cc)].append();
+    list_entry.set(opts.scripts[cc]);
+  }
+
+  catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
+  if (err != catalyst_status_ok)
+  {
+    std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
+  }
+}
+```
 
  Let's break this down.
 
- ```diff
-+#include <catalyst.hpp>
-+#include <catalyst_conduit.hpp>
+```cpp
+#include <catalyst.hpp>
+#include <catalyst_conduit.hpp>
 ```
 We will be using the C++ wrappings of catalyst so we need to include these two files.
 
-```diff
-+  conduit_cpp::Node node;
+```cpp
+  conduit_cpp::Node node;
 ```
 This is the argument we will be passing to `catalyst_initialize`. Its API resembles closely that of a map/JSON structure.
 For a description of the conduit API see [here](https://llnl-conduit.readthedocs.io/en/latest/tutorial_cpp.html)
 
 The node structure  needs to adhere to the [initialize](https://docs.paraview.org/en/latest/Catalyst/blueprints.html#protocol-initialize) protocol of ParaViewCatalyst. 
 
-```diff
-+ for (size_t cc=0; cc < opts.scripts.size(); ++cc)
-+  {
-+    node["catalyst/scripts/script_" + std::to_string(cc)] = opts.scripts[cc];
-+  }
+```cpp
+ for (size_t cc=0; cc < opts.scripts.size(); ++cc)
+  {
+    node["catalyst/scripts/script_" + std::to_string(cc)] = opts.scripts[cc];
+  }
 ```
 
 For every provided script we create an entry under `catalyst/scripts`.
 
-```diff
-+  catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
-+  if (err != catalyst_status_ok)
-+  {
-+    std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
-+  }
+```cpp
+  catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
+  if (err != catalyst_status_ok)
+  {
+    std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
+  }
 ```
 Finally, we pass the node to `catalyst_execute` and check its return value.
 
@@ -486,17 +478,16 @@ Finally, we pass the node to `catalyst_execute` and check its return value.
 For finalize catalyst we just pass an empty node.
 
 `lulesh-catalyst.cc`:
-```diff
- void FinalizeCatalyst()
- {
--  std::cerr << "FinalizeCatalyst" << std::endl;
-+  conduit_cpp::Node node;
-+  catalyst_status err = catalyst_finalize(conduit_cpp::c_node(&node));
-+  if (err != catalyst_status_ok)
-+  {
-+    std::cerr << "Failed to finalize: " << err << std::endl;
-+  }
- }
+```cpp
+void FinalizeCatalyst()
+{
+  conduit_cpp::Node node;
+  catalyst_status err = catalyst_finalize(conduit_cpp::c_node(&node));
+  if (err != catalyst_status_ok)
+  {
+    std::cerr << "Failed to finalize: " << err << std::endl;
+  }
+}
  ```
 
 ## 7. Passing Data to ParaView
@@ -511,35 +502,30 @@ Since the arrays of interest are not exposed via any Domain method we will be
 adding a new method `conduit_cpp::Node& node()` that returns a conduit node
 that describes the domain.
 
-```diff
-@@ -22,6 +22,10 @@
+```cpp
  #include <vector>
 
- #include "lulesh-catalyst.h"
-+#ifdef VIZ_CATALYST
-+#include "catalyst.hpp"
-+#include "catalyst_conduit.hpp"
-+#endif
+#include "lulesh-catalyst.h"
+// Add required header files
+#ifdef VIZ_CATALYST
+#include "catalyst.hpp"
+#include "catalyst_conduit.hpp"
+#endif
 
- //**************************************************
- // Allow flexibility for arithmetic representations
-@@ -444,6 +448,9 @@ class Domain {
-    MPI_Request sendRequest[26] ; // 6 faces + 12 edges + 8 corners
- #endif
 
-+#ifdef VIZ_CATALYST
-+  conduit_cpp::Node& node() { return m_node; }
-+#endif
+  class Domain {
+  ...
+
+// expose the conduit node to ExecuteCatalyst
+#ifdef VIZ_CATALYST
+  conduit_cpp::Node& node() { return m_node; }
+#endif
    private:
 
-    void BuildMesh(Int_t nx, Int_t edgeNodes, Int_t edgeElems);
-@@ -594,6 +601,9 @@ class Domain {
-    Index_t m_colMin, m_colMax;
-    Index_t m_planeMin, m_planeMax ;
-
-+#ifdef VIZ_CATALYST
-+   conduit_cpp::Node m_node;
-+#endif
+// A new member to hold the conduit node
+#ifdef VIZ_CATALYST
+   conduit_cpp::Node m_node;
+#endif
  } ;
  ```
 When it comes to the contents of the node ParaViewCatalyst uses the Conduit
@@ -559,17 +545,16 @@ Sets](https://llnl-conduit.readthedocs.io/en/latest/blueprint_mesh.html#coordina
 protocol:
 
 `lulesh-init.cc`:
-```diff
-@@ -191,6 +191,14 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
+```cpp
     //set initial deltatime base on analytic CFL calculation
     deltatime() = (Real_t(.5)*cbrt(volo(0)))/sqrt(Real_t(2.0)*einit);
-+
-+#ifdef VIZ_CATALYST
-+   this->m_node["coordsets/coords/type"] = "explicit";
-+   this->m_node["coordsets/coords/values/x"].set_external(m_x);
-+   this->m_node["coordsets/coords/values/y"].set_external(m_y);
-+   this->m_node["coordsets/coords/values/z"].set_external(m_z);
-+#endif
+
+#ifdef VIZ_CATALYST
+   this->m_node["coordsets/coords/type"] = "explicit";
+   this->m_node["coordsets/coords/values/x"].set_external(m_x);
+   this->m_node["coordsets/coords/values/y"].set_external(m_y);
+   this->m_node["coordsets/coords/values/z"].set_external(m_z);
+#endif
 ```
 Note that using `set_external` passes only a **reference** to ParaView and thus
 no copy of data will be performed when passing the data.
@@ -579,23 +564,22 @@ Topology](https://llnl-conduit.readthedocs.io/en/latest/blueprint_mesh.html#stru
 protocol.
 
 `lulesh-init.cc`:
-```diff
-@@ -198,7 +198,11 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
-    this->m_node["coordsets/coords/values/y"].set_external(m_y);
-    this->m_node["coordsets/coords/values/z"].set_external(m_z);
+```cpp
+   this->m_node["coordsets/coords/values/y"].set_external(m_y);
+   this->m_node["coordsets/coords/values/z"].set_external(m_z);
 
-+   this->m_node["topologies/mesh/type"] = "structured";
-+   this->m_node["topologies/mesh/coordset"] =  "coords";
-+   this->m_node["topologies/mesh/elements/dims/i"] = nx;
-+   this->m_node["topologies/mesh/elements/dims/j"] = nx;
-+   this->m_node["topologies/mesh/elements/dims/k"] = nx;
+   this->m_node["topologies/mesh/type"] = "structured";
+   this->m_node["topologies/mesh/coordset"] =  "coords";
+   this->m_node["topologies/mesh/elements/dims/i"] = nx;
+   this->m_node["topologies/mesh/elements/dims/j"] = nx;
+   this->m_node["topologies/mesh/elements/dims/k"] = nx;
  #endif
 ```
 
 
 ::: tip NOTE
 
-Make sure to check other examples here TODO where we create adaptors for different types of data.
+Make sure to check other examples [here](https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/Examples) where we create adaptors for different types of data.
 
 :::
 
@@ -615,7 +599,6 @@ First we update the signature of `ExecuteCatalyst` to pass the domain by referen
 
 `lulesh-catalyst.h`:
 ```diff
-@@ -1,7 +1,8 @@
  #ifndef LULESH_CATALYST_H
  #define LULESH_CATALYST_H
  struct cmdLineOpts;
@@ -628,17 +611,11 @@ First we update the signature of `ExecuteCatalyst` to pass the domain by referen
 ```
 `lulesh-catalyst.cc`
 ```diff
-@@ -21,7 +21,7 @@ void InitializeCatalyst(const cmdLineOpts& opts)
-   }
- }
 
 -void ExecuteCatalyst()
 +void ExecuteCatalyst(Domain& localDomain)
  {
    std::cerr << "ExecuteCatalyst" << std::endl;
- }
-@@ -40,7 +40,7 @@ void InitializeCatalyst(const cmdLineOpts& opts)
- {
  }
 
 -void ExecuteCatalyst()
@@ -649,10 +626,6 @@ First we update the signature of `ExecuteCatalyst` to pass the domain by referen
 
 `lulesh.cc`:
 ```diff
-@@ -2755,7 +2755,7 @@ int main(int argc, char *argv[])
-          std::cout.unsetf(std::ios_base::floatfield);
-       }
-
 -      ExecuteCatalyst();
 +      ExecuteCatalyst(*locDom);
     }
@@ -660,21 +633,21 @@ First we update the signature of `ExecuteCatalyst` to pass the domain by referen
 Finally, we update `ExecuteCatalyst` to call `catalyst_execute`:
 
 `lulesh-catalyst.cc`:
-```diff
-@@ -23,7 +23,18 @@ void ExecuteCatalyst(Domain& localDomain)
+```cpp
+ void ExecuteCatalyst(Domain& localDomain)
  {
--  std::cerr << "ExecuteCatalyst" << std::endl;
-+  conduit_cpp::Node node;
-+  node["catalyst/state/cycle"] = localDomain.cycle();
-+  node["catalyst/state/time"] = localDomain.time();
-+  node["catalyst/channels/grid/type"] = "mesh";
-+  node["catalyst/channels/grid/data"] = localDomain.node();
-+
-+  catalyst_status err = catalyst_execute(conduit_cpp::c_node(&node));
-+  if (err != catalyst_status_ok)
-+  {
-+    std::cerr << "Failed to execute Catalyst: " << err << std::endl;
-+  }
+  conduit_cpp::Node node;
+  node["catalyst/state/cycle"] = localDomain.cycle();
+  node["catalyst/state/time"] = localDomain.time();
+  node["catalyst/channels/grid/type"] = "mesh";
+  node["catalyst/channels/grid/data"] = localDomain.node();
+
+  catalyst_status err = catalyst_execute(conduit_cpp::c_node(&node));
+  if (err != catalyst_status_ok)
+  {
+    std::cerr << "Failed to execute Catalyst: " << err << std::endl;
+  }
+}
 ```
 
 That's it! We are passing data to ParaView ! In the next step we will be saving
@@ -732,7 +705,7 @@ protocol of the Conduit Mesh Blueprint.
 
 This is how this looks for the energy `m_e` array:
 
-```
+```cpp
 conduit_cpp::Node node;
 node["fields/energy/association"] = "element";
 node["fields/energy/topology"] = "mesh";
@@ -748,40 +721,39 @@ which mean that no copy will take place when passing the data to ParaView.
 Since we have many arrays of this type let's create a helper method:
 
 `lulesh-init.cc`:
-```diff
-@@ -12,6 +12,20 @@
+```cpp
  #include <cstdlib>
  #include "lulesh.h"
 
-+#ifdef VIZ_CATALYST
-+namespace  {
-+
-+void AddField(conduit_cpp::Node& node, const std::string& name, const std::string& association, std::vector<Real_t>& field)
-+{
-+  node["fields/" + name + "/association"] = association;
-+  node["fields/" + name + "/topology"] = "mesh";
-+  node["fields/" + name + "/values"].set_external(field);
-+}
-+
-+}
-+
-+#endif
-+
+#ifdef VIZ_CATALYST
+namespace  {
+
+void AddField(conduit_cpp::Node& node, const std::string& name, const std::string& association, std::vector<Real_t>& field)
+{
+  node["fields/" + name + "/association"] = association;
+  node["fields/" + name + "/topology"] = "mesh";
+  node["fields/" + name + "/values"].set_external(field);
+}
+
+}
+
+#endif
+
  /////////////////////////////////////////////////////////////////////
  Domain::Domain(Int_t numRanks, Index_t colLoc,
                 Index_t rowLoc, Index_t planeLoc,
-@@ -203,6 +217,14 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
-    this->m_node["topologies/mesh/elements/dims/i"] = nx;
-    this->m_node["topologies/mesh/elements/dims/j"] = nx;
-    this->m_node["topologies/mesh/elements/dims/k"] = nx;
-+
-+   AddField(this->m_node,"e","element",m_e);
-+   AddField(this->m_node,"p","element",m_p);
-+   AddField(this->m_node,"q","element",m_q);
-+   AddField(this->m_node,"v","element",m_v);
-+   AddField(this->m_node,"ss","element",m_ss);
-+   AddField(this->m_node,"elemMass","element",m_elemMass);
-+   AddField(this->m_node,"nodalMass","vertex",m_nodalMass);
+...
+   this->m_node["topologies/mesh/elements/dims/i"] = nx;
+   this->m_node["topologies/mesh/elements/dims/j"] = nx;
+   this->m_node["topologies/mesh/elements/dims/k"] = nx;
+
+   AddField(this->m_node,"e","element",m_e);
+   AddField(this->m_node,"p","element",m_p);
+   AddField(this->m_node,"q","element",m_q);
+   AddField(this->m_node,"v","element",m_v);
+   AddField(this->m_node,"ss","element",m_ss);
+   AddField(this->m_node,"elemMass","element",m_elemMass);
+   AddField(this->m_node,"nodalMass","vertex",m_nodalMass);
  #endif
 
  } // End constructor
@@ -792,32 +764,32 @@ component separately under a different leaf below `/values` named `u`,`v`,`w`
 respectively.
 
 `lulesh-init.cc`
-```diff
-@@ -22,6 +22,16 @@ void AddField(conduit_cpp::Node& node, const std::string& name, const std::strin
-   node["fields/" + name + "/values"].set_external(field);
- }
+```cpp
+nmespace { 
+...
 
-+
-+void AddField(conduit_cpp::Node& node, const std::string& name, const std::string& association, std::vector<Real_t>& fieldX, std::vector<Real_t>& fieldY, std::vector<Real_t>& fieldZ)
-+{
-+  node["fields/" + name + "/association"] = association;
-+  node["fields/" + name + "/topology"] = "mesh";
-+  node["fields/" + name + "/values/u"].set_external(fieldX);
-+  node["fields/" + name + "/values/v"].set_external(fieldY);
-+  node["fields/" + name + "/values/w"].set_external(fieldZ);
-+}
-+
- }
+void AddField(conduit_cpp::Node& node, const std::string& name, const std::string& association, std::vector<Real_t>& fieldX, std::vector<Real_t>& fieldY, std::vector<Real_t>& fieldZ)
+{
+  node["fields/" + name + "/association"] = association;
+  node["fields/" + name + "/topology"] = "mesh";
+  node["fields/" + name + "/values/u"].set_external(fieldX);
+  node["fields/" + name + "/values/v"].set_external(fieldY);
+  node["fields/" + name + "/values/w"].set_external(fieldZ);
+}
+
+}
 
  #endif
-@@ -225,6 +235,10 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
+
+...
+Domain::Domain(Int_t numRanks, Index_t colLoc,
     AddField(this->m_node,"ss","element",m_ss);
     AddField(this->m_node,"elemMass","element",m_elemMass);
     AddField(this->m_node,"nodalMass","vertex",m_nodalMass);
-+
-+   AddField(this->m_node,"velocity","vertex",m_xd,m_yd,m_zd);
-+   AddField(this->m_node,"acceleration","vertex",m_xdd,m_ydd,m_zdd);
-+   AddField(this->m_node,"force","vertex",m_fx,m_fy,m_fz);
+
+   AddField(this->m_node,"velocity","vertex",m_xd,m_yd,m_zd);
+   AddField(this->m_node,"acceleration","vertex",m_xdd,m_ydd,m_zdd);
+   AddField(this->m_node,"force","vertex",m_fx,m_fy,m_fz);
  #endif
 
  } // End constructor
