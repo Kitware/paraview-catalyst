@@ -25,11 +25,11 @@ You can use the following commands  to configure and build Catalyst with MPI and
 export CATALYSTSRC=[the path to where you checked-out Catalyst's source]
 export CATALYSTBUILD=[the path to the Catalyst build directory]
 
-cmake -S $CATALYSTSRC -B $CATALYSTBUILD
+cmake -S $CATALYSTSRC -B $CATALYSTBUILD -G Ninja -DCATALYST_USE_MPI=ON -DCATALYST_WRAP_PYTHON=ON
 cmake --build $CATALYSTBUILD
 ```
 
-__Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).
+__Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).  Also you can choose to build Catalyst without MPI support by setting ``-DCATALYST_USE_MPI=OFF`` and without Pythong wrappings by setting ``-DCATALYST_WRAP_PYTHON = OFF``
 
 ## Building ParaView Catalyst
 
@@ -58,14 +58,20 @@ export CATALYSTBUILD=[the path to the Catalyst build directory]
 
 __Note:__ These variables are not used by the example, but are used for convenience.
 
-The path to the example is  `$PVSOURCE/Examples/Catalyst2/CxxFullExample`.  This example generates data in the form of an unstructured mesh of hexahedra.
+You can access the Catalyst Examples source code by doing the following:
+```bash
+git clone https://gitlab.kitware.com/catalyst-examples.git
+cd catalyst-examples/ParaView
+```
+
+The source for the example we will be using is in the `CxxUnstructuredGrid` directory.  This example generates data in the form of an unstructured mesh of hexahedra.
 
 To build the example, do the following:
 
 ```bash
 mkdir cxxFullExampleBuild
 cd cxxFullExampleBuild
-cmake cmake -G Ninja -DCMAKE_PREFIX_PATH=$CATALYSTBUILD -DParaView_DIR=$PVBUILD -DParaView_CATALYST_DIR=$PVBUILD/lib/catalyst $PVSOURCE/Examples/Catalyst2/CxxFullExample
+cmake -G Ninja -DCMAKE_PREFIX_PATH=$CATALYSTBUILD -DParaView_DIR=$PVBUILD -DParaView_CATALYST_DIR=$PVBUILD/lib/catalyst ../CxxUnstructuredGrid
 cmake --build .
 ```
 
@@ -80,7 +86,7 @@ Lets start with running a simple pipeline that simply inspects the data being pa
 	"catalyst": {
      	"scripts": {
          	"script": {
-             	"filename": "/Users/bob.obara/Projects/Kitware/ParaView/Examples/Catalyst2/CxxFullExample/catalyst_pipeline.py"
+             	"filename": "/Users/bob.obara/Projects/Kitware/CatalystExamples/ParaView/CxxUnstructuredGrid/catalyst_pipeline.py"
               }
           },
           "python_path" : "/Users/bob.obara/Projects/Kitware/Builds/Catalyst_XC16.2_CM3.31.6/lib/cmake/catalyst-2.0/../../../lib/python3.13/site-packages"
@@ -97,11 +103,11 @@ Lets start with running a simple pipeline that simply inspects the data being pa
 The file describes the structure of two Conduit nodes:
 
 * catalyst node which specifies the following:
-  * Name of the Catalyst Python script that should be applied to the data being sent from the simulation/data generator(which is located in the $PVSOURCE/Examples/Catalyst2/CxxFullExample source directory).
+  * Name of the Catalyst Python script that should be applied to the data being sent from the simulation/data generator(which is located in the catalyst-examples/ParaView/CxxUnstructuredGrid source directory).
   * Python path for wrapped libraries for Catalyst itself.  Note that this is only needed if your Python script calls Catalyst functions with this script does call.
 * catalyst_load node which specifies the following:
   * Catalyst implementation to be used - this specifies the Catalyst back-end to be used.  In this case we are using the ParaView Catalyst back-end.
-  * Search Path - for the specified backend you need to indicate where the shared libaries are located.
+  * Search Path - for the specified back-end you need to indicate where the shared libraries are located.
 
 Here is a corresponding YAML version of the file that specifies the exact same information:
 
@@ -110,7 +116,7 @@ Here is a corresponding YAML version of the file that specifies the exact same i
     scripts:
       script:
         # Filename refers to the ParaView Catalyst Pipeline to be used
-        filename: "/Users/bob.obara/Projects/Kitware/ParaView/Examples/Catalyst2/CxxFullExample/catalyst_pipeline.py"
+        filename: "/Users/bob.obara/Projects/Kitware/CatalystExamples/ParaView/CxxUnstructuredGrid/catalyst_pipeline.py"
     # This should be set where Catalyst's Python wrappers are located
     python_path: "/Users/bob.obara/Projects/Kitware/Builds/Catalyst_XC16.2_CM3.31.6/lib/cmake/catalyst-2.0/../../../lib/python3.13/site-packages"
 
@@ -125,7 +131,7 @@ Here is a corresponding YAML version of the file that specifies the exact same i
 Now lets run the example with this input file:
 
 ```bash
-./bin/CxxFullExampleV2 catalyst_pipeline.json
+./bin/CxxUnstructuredGrid catalyst_pipeline.json
 ```
 
 __Note:__  You can also pass in the catalyst_pipeline.yaml instead.
@@ -139,39 +145,39 @@ bounds: (0.0, 69.0, 0.0, 64.9, 0.0, 55.9)
 velocity-magnitude-range: (0.0, 0.0)
 pressure-range: (1.0, 1.0)
 node=
-catalyst: 
-  state: 
+catalyst:
+  state:
     timestep: 0
     time: 0.0
     multiblock: 1
-  channels: 
-    grid: 
+  channels:
+    grid:
       type: "mesh"
-      data: 
-        coordsets: 
-          coords: 
+      data:
+        coordsets:
+          coords:
             type: "explicit"
-            values: 
+            values:
               x: [0.0, 0.0, 0.0, ..., 69.0, 69.0]
               y: [0.0, 0.0, 0.0, ..., 64.9, 64.9]
               z: [0.0, 1.3, 2.6, ..., 54.6, 55.9]
-        topologies: 
-          mesh: 
+        topologies:
+          mesh:
             type: "unstructured"
             coordset: "coords"
-            elements: 
+            elements:
               shape: "hex"
               connectivity: [0, 2640, 2684, ..., 184799, 182159]
-        fields: 
-          velocity: 
+        fields:
+          velocity:
             association: "vertex"
             topology: "mesh"
             volume_dependent: "false"
-            values: 
+            values:
               x: [0.0, 0.0, 0.0, ..., 0.0, 0.0]
               y: [0.0, 0.0, 0.0, ..., 0.0, 0.0]
               z: [0.0, 0.0, 0.0, ..., 0.0, 0.0]
-          pressure: 
+          pressure:
             association: "element"
             topology: "mesh"
             volume_dependent: "false"
@@ -209,7 +215,7 @@ This defines a simple ParaView pipeline that is used to process the FEDriver dat
 Now lets see what happens if all we do is change the specified script to generate images based on the data being generated.  To do this, simply change the execution line to be:
 
 ```bash
-./bin/CxxFullExample catalyst_pipeline_with_rendering.json
+./bin/CxxUnstructuredGrid catalyst_pipeline_with_rendering.json
 ```
 
 Now instead of simply showing output on the screen, it has generated images for each time step and placed them in datasets sub-directory of the example’s build directory.  Combining these images together results in the following short video comprising of 5 time-steps.
@@ -227,7 +233,7 @@ __Note:__ If you compare this input file with the one used previously you will n
 But what if you wanted ParaView Catalyst to extract information from the simulation to be processed further using ParaView?  There is a third input file created in this example that generates VTK information instead.  As in the previous case, the only difference between the previous input files is the Python script being used.
 
 ```bash
-./bin/CxxFullExample gridwriter.json
+./bin/CxxUnstructuredGrid gridwriter.json
 ```
 
 Now instead of producing images, this script will now generate VTK multi-block (.vtm) files of the extracted time-steps that can then be read back into ParaView.
