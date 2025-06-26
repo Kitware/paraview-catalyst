@@ -1,6 +1,6 @@
 # Using ParaView to Create the ParaView Catalyst Script
 
-In the __Getting Started Section__, the Catalyst scripts were already created for you to use.  In this example, we will go through the process of creating a ParaView Catalyst script and demonstrate its use. Though you can directly create ParaVire Catalyst scripts using a text editor, this example will be using the ParaView Application to generate the script.
+In the [Getting Started Section](getting-started), the Catalyst scripts were already created for you to use.  In the [Instrumenting the Simulation with Catalyst Section](instrumenting-simulations-with-catalyst), we instrumented the LULESH simulation with Catalyst. In this example, we will go through the process of creating a ParaView Catalyst script and demonstrate its use using the instrumented LULESH. Though you can directly create ParaVire Catalyst scripts using a text editor, this example will be using the ParaView Application to generate the script.
 
 ## Getting ParaView
 
@@ -11,13 +11,13 @@ For this example, we will be using the Lulesh proxy application which we have al
 To compile the simulation code:
 
 ```bash
-git clone https://gitlab.kitware.com/christos.tsolakis/lulesh-catalyst.git
-mkdir build
-cmake -GNinja -DWITH_MPI=TRUE -DWITH_CATALYST=TRUE -Dcatalyst_DIR=<installation path of catalyst>/lib/cmake/catalyst-2.0
-ninja
+git clone https://gitlab.kitware.com/catalyst-examples.git
+cd catalyst-examples/ParaView/Lulesh-tutorial
+cmake -G Ninja -S Version4 -B myLulesh-build -DWITH_CATALYST=1 -DMPI=1 \
+      -DCMAKE_PREFIX_PATH=$CATALYSTBUILD \
+      -DParaView_CATALYST_DIR={Location of the ParaView Catalyst Library Directory}
+cmake --build myLulesh-build
 ```
-
-
 
 ## Step 1 - Loading in Sample Data
 The first step in the process will be to use some sample data that best represents the structure and fields that ParaView Catalyst will be dealing with.  This could be a result from a previous simulation run.  When loading in the data into ParaView it is important that the name of the source matches that name of the Catalyst Channel being used.  If it does not, make sure to rename it in the ParaView session.  In the case of this example, the name of the Catalyst Channel is **grid**.  The video below shows how to do the following:
@@ -32,6 +32,19 @@ The first step in the process will be to use some sample data that best represen
     </video>
     <figcaption>This video shows sample data being loading into ParaView.</figcaption>
 </figure>
+
+### Where do I get sample data?
+
+ One way of generating sample would be to run the simulation on a smaller problem.  In the Version4 directory we have provided ParaViewCatalyst script that outputs the simulation's geometry and fields.
+
+```bash
+export CATALYST_IMPLEMENTATION_NAME=paraview
+export CATALYST_IMPLEMENTATION_PATHS=<paraview build directory>/lib/catalyst
+cd myLulesh-build
+mpiexec -np 8 ./lulesh2.0 -x ../Version4/script.py -p -i 30 -s 10
+```
+The above will create a coarse simulation composed of 30 time-steps.  If we only want to see the last time-step, we could edit script.py and change ``options.GlobalTrigger.Frequency`` parameter from **1** to **30** and then run the above commands.  This will only write out the result for the last time-step.
+
 
 ## Step 2- Adding 3D Visualization Filters
 Next lets creates a set of 10 contours based on the artificial viscosity (*q*) field, but first you will need to project the values that are define on each cell to its neighboring points as shown below.
@@ -96,6 +109,7 @@ Back to the build directory of the simulation we setup the environment and run t
 ```bash
 export CATALYST_IMPLEMENTATION_NAME=paraview
 export CATALYST_IMPLEMENTATION_PATHS=<paraview build directory>/lib/catalyst
+cd myLulesh-build
 mpiexec -np 8 ./lulesh2.0 -x lulest_state.py -p -i 1000 -s 50
 ```
 
