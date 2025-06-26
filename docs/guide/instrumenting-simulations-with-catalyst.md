@@ -1035,9 +1035,9 @@ if (WITH_CATALYST)
   find_package(catalyst REQUIRED)
 +  find_path(ParaView_CATALYST_DIR lib*-catalyst.* REQUIRED DOC "Location to ParaViewCatalyst Library")
 +  configure_file(
-+  ${CMAKE_CURRENT_SOURCE_DIR}/input.yaml.in
-+  ${CMAKE_CURRENT_BINARY_DIR}/input.yaml
-+  @ONLY)
++    ${CMAKE_CURRENT_SOURCE_DIR}/input.yaml.in
++    ${CMAKE_CURRENT_BINARY_DIR}/input.yaml
++    @ONLY)
 
 endif()
 ```
@@ -1046,7 +1046,7 @@ These changes will now require you to specify the location of the ParaView Catal
 Now when you build this version of LULESH you will use the following command:
 
 ```bash
-cmake -G Ninja -S myLulesh -B myLulesh-build -DWITH_CATALYST=1 -DMPI=1 \
+cmake -G Ninja -S myLulesh -B myLulesh-build -DWITH_CATALYST=1 -DWITH_MPI=1 \
       -DCMAKE_PREFIX_PATH=$CATALYSTBUILD \
       -DParaView_CATALYST_DIR={Location of the ParaView Catalyst Library Directory}
 cmake --build myLulesh-build
