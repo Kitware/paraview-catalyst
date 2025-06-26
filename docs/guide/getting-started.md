@@ -29,7 +29,7 @@ cmake -S $CATALYSTSRC -B $CATALYSTBUILD -G Ninja -DCATALYST_USE_MPI=ON -DCATALYS
 cmake --build $CATALYSTBUILD
 ```
 
-__Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).  Also you can choose to build Catalyst without MPI support by setting ``-DCATALYST_USE_MPI=OFF`` and without Pythong wrappings by setting ``-DCATALYST_WRAP_PYTHON = OFF``
+__Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).  Also you can choose to build Catalyst without MPI support by setting ``-DCATALYST_USE_MPI=OFF`` and without Python wrappings by setting ``-DCATALYST_WRAP_PYTHON = OFF``
 
 ## Building ParaView Catalyst
 

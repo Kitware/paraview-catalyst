@@ -9,7 +9,7 @@ Before you begin, make sure you have installed the following on your system:
 - [Ninja](https://ninja-build.org) - build system tool.  Not required but highly recommended.  If you want to use make instead please make sure to do the following:
   - When configuring CMake, please omit any **-G Ninja** parameters.
   - When building, if the line starts with **ninja** please use **make** instead.
-- [MPI](https://www.open-mpi.org) - optional. If you are building without MPI make sure any CMake configuration line for LULESH has **-DMPI=0** in stead of **-DMPI=1**.
+- [MPI](https://www.open-mpi.org) - optional. If you are building without MPI make sure any CMake configuration line for LULESH has **-DMPI=0** instead of **-DMPI=1**.
  - A C++ compiler
 
 ## Compiling Catalyst
@@ -538,7 +538,7 @@ All of the following versions will now involve using ParaView so we will need to
 
 ## V3: Passing Geometry
 
-Now comes the interesting part where we need to pass simulation data through Catalyst to the in situ processing side. All information is passed to Catalyst via a Conduit node. As one might imagine the information represented in this node can varies significantly from simulation to simulation. In addition, the protocol/schema used to decipher the node's information will also depend on the Catalyst back-end being used. In our case, ParaView Catalyst will be performing the in situ processing. When it comes to the contents of the node, ParaView Catalyst assumes that the Blueprint Mesh [protocol](https://llnl-conduit.readthedocs.io/en/latest/blueprint_mesh.html) is used to describe the data.
+Now comes the interesting part where we need to pass simulation data through Catalyst to the in situ processing side. All information is passed to Catalyst via a Conduit node. As one might imagine the information represented in this node can vary significantly from simulation to simulation. In addition, the protocol/schema used to decipher the node's information will also depend on the Catalyst back-end being used. In our case, ParaView Catalyst will be performing the in situ processing. When it comes to the contents of the node, ParaView Catalyst assumes that the Blueprint Mesh [protocol](https://llnl-conduit.readthedocs.io/en/latest/blueprint_mesh.html) is used to describe the data.
 
 For LULESH the data structure of interest is the class `Domain` declared around
 line 152 of `lulesh.h`. At each iteration we want pass the coordinates,connectivity, point- and cell-data of this domain to ParaView Catalyst.
