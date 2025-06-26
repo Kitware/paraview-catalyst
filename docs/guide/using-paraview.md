@@ -11,7 +11,6 @@ For this example, we will be using the Lulesh proxy application which we have al
 To compile the simulation code:
 
 ```bash
-```bash
 git clone https://gitlab.kitware.com/catalyst-examples.git
 cd catalyst-examples/ParaView/Lulesh-tutorial
 cmake -G Ninja -S Version4 -B myLulesh-build -DWITH_CATALYST=1 -DMPI=1 \
