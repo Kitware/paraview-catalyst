@@ -11,7 +11,7 @@ For this example, we will be using the Lulesh proxy application which we have al
 To compile the simulation code:
 
 ```bash
-git clone https://gitlab.kitware.com/catalyst-examples.git
+git https://gitlab.kitware.com/paraview/catalyst-examples
 cd catalyst-examples/ParaView/Lulesh-tutorial
 cmake -G Ninja -S Version5 -B myLulesh-build -DWITH_CATALYST=1 -DWITH_MPI=1 \
       -DCMAKE_PREFIX_PATH=$CATALYSTBUILD \
@@ -102,20 +102,20 @@ Next you will need to save the pipeline you have created as a ParaView Catalyst 
 </figure>
 
 ## Step 7 - Creating the Catalyst Input File
-Lets copy the **input.yaml** file that was created in the myLulesh-build directory and call it **myLulesh.yaml**.  We need to edit this file so that it uses the ParaView Catalyst script file we just created.  Below is an example created of a generated input.yaml file.  What needs to be changed in the line that starts with **filename:**.  You need to replace the string that follows it with the path of the ParaView Catalyst script you just saved. Remember to keep the double quotes around the string!
+Lets copy the **input.yaml** file that was created in the myLulesh-build directory and call it **myLulesh.yaml**.  We need to edit this file so that it uses the ParaView Catalyst script file we just created.  Below is an example created from a generated input.yaml file.  What needs to be changed in the line that starts with **filename:**.  You need to replace the string that follows it with the path of the ParaView Catalyst script you just saved. Remember to keep the double quotes around the string!
 
 ```yaml
 ---
   catalyst:
     scripts:
-      script:
+      script0:
         # Filename refers to the ParaView Catalyst Pipeline to be used
-        filename: "/Users/bob.obara/Projects/Kitware/CatalystExamples/ParaView/Lulesh-tutorial/myLulesh/script.py"
+        filename: "/Users/theUser/Projects/Kitware/CatalystExamples/ParaView/Lulesh-tutorial/myLulesh/script.py"
   catalyst_load:
     implementation: paraview
     search_paths:
       # This should be set to the directory where the ParaView Catalyst Libraries are located
-      paraview: "/Users/bob.obara/Projects/Kitware/Builds/ParaView_noQt_XC16.2_CM3.31.6/lib/catalyst"
+      paraview: "/Users/theUser/Projects/Kitware/Builds/ParaView_noQt_XC16.2_CM3.31.6/lib/catalyst"
 
 ```
 
