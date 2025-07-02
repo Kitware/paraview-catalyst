@@ -37,7 +37,7 @@ Before we begin to modify the simulation, we first have to understand the data t
 
 All of the source code referred to in this guide can be accessed by doing the following:
 ```bash
-git clone https://gitlab.kitware.com/catalyst-examples.git
+git clone https://gitlab.kitware.com/paraview/catalyst-examples
 cd catalyst-examples/ParaView/Lulesh-tutorial
 ```
 Here you will find modified versions of LULESH that reflect the changes being described here.  Each sub-directory has its own CMake file and should build on your machine.
@@ -115,19 +115,32 @@ Let's add a new file called `lulesh-catalyst.cc` that will hold these three meth
 `lulesh-catalyst.cc:`
 ```cpp
 #include <iostream>
+
+namespace
+{
+  bool s_catalystInitialized = false;
+}
+
 void InitializeCatalyst()
 {
   std::cerr << "InitializeCatalyst" << std::endl;
+  s_catalystInitialized = true;
 }
 
 void ExecuteCatalyst()
 {
-  std::cerr << "ExecuteCatalyst" << std::endl;
+  if (s_catalystInitialized)
+  {
+    std::cerr << "ExecuteCatalyst" << std::endl;
+  }
 }
 
 void FinalizeCatalyst()
 {
-  std::cerr << "FinalizeCatalyst" << std::endl;
+  if (s_catalystInitialized)
+  {
+    std::cerr << "FinalizeCatalyst" << std::endl;
+  }
 }
 ```
 `lulesh-catalyst.h`
@@ -139,7 +152,7 @@ void ExecuteCatalyst();
 void FinalizeCatalyst();
 #endif
 ```
-
+Here we use the variable ``s_catalystInitialized`` to indicate if Catalyst has been initialized. This will allow  the code to ignore Catalyst calls if it has not been properly initialized or if the user does not what to perform in situ processing for a specific run.
 
 Updated `CMakeLists.txt`:
 
@@ -265,19 +278,32 @@ Before we move on to the next topic, it is good practice to add a new build opti
 ```cpp
 #ifdef VIZ_CATALYST
 #include <iostream>
+
+namespace
+{
+  bool s_catalystInitialized = false;
+}
+
 void InitializeCatalyst()
 {
   std::cerr << "InitializeCatalyst" << std::endl;
+  s_catalystInitialized = true;
 }
 
 void ExecuteCatalyst()
 {
-  std::cerr << "ExecuteCatalyst" << std::endl;
+  if (s_catalystInitialized)
+  {
+    std::cerr << "ExecuteCatalyst" << std::endl;
+  }
 }
 
 void FinalizeCatalyst()
 {
-  std::cerr << "FinalizeCatalyst" << std::endl;
+  if (s_catalystInitialized)
+  {
+    std::cerr << "FinalizeCatalyst" << std::endl;
+  }
 }
 
 #else
@@ -448,6 +474,14 @@ Next we update `InitializeCatalyst` definition to accept and process `cmdLineOpt
  void InitializeCatalyst(const cmdLineOpts& opts)
   {
    conduit_cpp::Node node;
+
+   if (opts.scripts.empty())
+   {
+      // There are no Catalyst scripts specified
+      s_catalystInitialized = false;
+      return;
+   }
+
    for (size_t cc=0; cc < opts.scripts.size(); ++cc)
    {
      conduit_cpp::Node list_entry = node["catalyst/scripts/script_" + std::to_string(cc)].append();
@@ -458,6 +492,12 @@ Next we update `InitializeCatalyst` definition to accept and process `cmdLineOpt
    if (err != catalyst_status_ok)
    {
      std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
+     s_catalystInitialized = false;
+   }
+   else
+   {
+      // Catalyst was successfully initialized
+      s_catalystInitialized = true;
    }
  }
  #else
@@ -481,6 +521,17 @@ For a description of the conduit API see [here](https://llnl-conduit.readthedocs
 The node structure  needs to adhere to the [initialize](https://docs.paraview.org/en/latest/Catalyst/blueprints.html#protocol-initialize) protocol of ParaViewCatalyst.
 
 ```cpp
+   if (opts.scripts.empty())
+   {
+      // There are no Catalyst scripts specified
+      s_catalystInitialized = false;
+      return;
+   }
+```
+
+Here we are dealing with the case where the user has decided not to pass any Catalyst scripts using the ``-x`` command argument.  The result will be the code will now run without any in situ processing.
+
+```cpp
  for (size_t cc=0; cc < opts.scripts.size(); ++cc)
   {
     node["catalyst/scripts/script_" + std::to_string(cc)] = opts.scripts[cc];
@@ -494,10 +545,15 @@ For every provided script we create an entry under `catalyst/scripts`.
   if (err != catalyst_status_ok)
   {
     std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
+    s_catalystInitialized = false;
+  }
+  else
+  {
+    // Catalyst was successfully initialized
+    s_catalystInitialized = true;
   }
 ```
-Finally, we pass the node to `catalyst_initialize` and check its return value.
-
+Finally, we pass the node to `catalyst_initialize` and check its return value.  If there was a problem with initialization then we will ensure no further Catalyst processing will occur.
 
 The last step involves updating the calling site of `InitializeCatalyst`
 
@@ -517,16 +573,19 @@ In this case since we don't have any additional processing to be done for finali
 ```cpp
 void FinalizeCatalyst()
 {
-  conduit_cpp::Node node;
-  catalyst_status err = catalyst_finalize(conduit_cpp::c_node(&node));
-  if (err != catalyst_status_ok)
+  if (s_catalystInitialized)
   {
-    std::cerr << "Failed to finalize Catalyst: " << err << std::endl;
+    conduit_cpp::Node node;
+    catalyst_status err = catalyst_finalize(conduit_cpp::c_node(&node));
+    if (err != catalyst_status_ok)
+    {
+      std::cerr << "Failed to finalize Catalyst: " << err << std::endl;
+    }
   }
 }
  ```
 
-Make sure the code compiles with no issues.
+Make sure the code compiles with no issues and try running Lulesh with and without the ``-x`` option.  When using ``-x`` you can using any string since at this point we are not processing any information.  In the ``-x`` case you should see ExecuteCatalyst printouts while in the other case, which corresponds to the user not wanting to do in situ processing, they should be missing.
  ::: tip NOTE
 
  At this point your code should now resemble the source in the ``Version2`` directory.
@@ -661,16 +720,19 @@ Now lets update the body of ExecuteCatalyst to send the domain's information to 
 ```cpp
  void ExecuteCatalyst(Domain& localDomain)
  {
-  conduit_cpp::Node node;
-  node["catalyst/state/cycle"] = localDomain.cycle();
-  node["catalyst/state/time"] = localDomain.time();
-  node["catalyst/channels/grid/type"] = "mesh";
-  node["catalyst/channels/grid/data"] = localDomain.node();
-
-  catalyst_status err = catalyst_execute(conduit_cpp::c_node(&node));
-  if (err != catalyst_status_ok)
+  if (s_catalystInitialized)
   {
-    std::cerr << "Failed to execute Catalyst: " << err << std::endl;
+    conduit_cpp::Node node;
+    node["catalyst/state/cycle"] = localDomain.cycle();
+    node["catalyst/state/time"] = localDomain.time();
+    node["catalyst/channels/grid/type"] = "mesh";
+    node["catalyst/channels/grid/data"] = localDomain.node();
+
+    catalyst_status err = catalyst_execute(conduit_cpp::c_node(&node));
+    if (err != catalyst_status_ok)
+    {
+      std::cerr << "Failed to execute Catalyst: " << err << std::endl;
+    }
   }
 }
 ```
@@ -977,14 +1039,20 @@ Finally, we need to simplify ``InitializeCatalyst`` to parse the contents of the
 
 void InitializeCatalyst(const cmdLineOpts& opts)
 {
+  // Has an input file been specified?
+  if (opts.catalystInput.empty())
+  {
+    s_catalystInitialized = false;
+    return;
+  }
   // Use the contents of the input file to initialize Catalyst
   std::ifstream input(opts.catalystInput);
 
   if (!input.is_open())
   {
-    std:: string temp = "Could not open: ";
-    temp.append(opts.catalystInput);
-    throw std::runtime_error(temp);
+    std::cerr << "Could not open Catalyst input file : " << opts.catalystInput << std::endl;
+    s_catalystInitialized = false;
+    return;
   }
 
   std::stringstream buffer;
@@ -999,6 +1067,11 @@ void InitializeCatalyst(const cmdLineOpts& opts)
   if (err != catalyst_status_ok)
   {
     std::cerr << "Failed to initialize Catalyst: " << err << std::endl;
+    s_catalystInitialized = false;
+  }
+  else
+  {
+    s_catalystInitialized = true;
   }
 }
 #else
@@ -1010,20 +1083,19 @@ void InitializeCatalyst(const std::string& catalystInputPath)
 ### Auto-configuring your Catalyst Input File
 One of the benefits of using CMake is that it can auto-configure files for you during the configuration step. Lets create the following file in your LULESH source directory:
 
-### input.yaml:
+### input.yaml.in:
 ```yaml
 ---
   catalyst:
     scripts:
-      # Filename refers to the ParaView Catalyst Pipeline to be used
-      script0: "@CMAKE_CURRENT_SOURCE_DIR@/script.py"
-
+      script0:
+        # Filename refers to the ParaView Catalyst Pipeline to be used
+        filename: "@CMAKE_CURRENT_SOURCE_DIR@/script.py"
   catalyst_load:
     implementation: paraview
     search_paths:
       # This should be set to the directory where the ParaView Catalyst Libraries are located
       paraview: "@ParaView_CATALYST_DIR@"
-
 ```
 
 Lets also move the ParaView Catalyst script ``script.py`` into your LULESH source directory.
@@ -1041,7 +1113,7 @@ if (WITH_CATALYST)
 
 endif()
 ```
-These changes will now require you to specify the location of the ParaView Catalyst libraries and will create a file called input.yaml in your build directory that is fully configured.
+These changes will now require you to specify the location of the ParaView Catalyst libraries.  When CMake configures your code, it  will create a file called input.yaml in your build directory that is fully configured and eliminates the need of any export statements prior to running the code.
 
 Now when you build this version of LULESH you will use the following command:
 
@@ -1051,8 +1123,7 @@ cmake -G Ninja -S myLulesh -B myLulesh-build -DWITH_CATALYST=1 -DWITH_MPI=1 \
       -DParaView_CATALYST_DIR={Location of the ParaView Catalyst Library Directory}
 cmake --build myLulesh-build
 ```
-
-To run it you would so the following:
+To run it you would do the following:
 ```bash
 cd myLulesh-build
 ./lulesh2.0 -s 10 -i 30 -p -x ./input.yaml
