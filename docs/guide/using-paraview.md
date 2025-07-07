@@ -11,9 +11,9 @@ For this example, we will be using the Lulesh proxy application which we have al
 To compile the simulation code:
 
 ```bash
-git clone https://gitlab.kitware.com/catalyst-examples.git
+git https://gitlab.kitware.com/paraview/catalyst-examples
 cd catalyst-examples/ParaView/Lulesh-tutorial
-cmake -G Ninja -S Version4 -B myLulesh-build -DWITH_CATALYST=1 -DMPI=1 \
+cmake -G Ninja -S Version5 -B myLulesh-build -DWITH_CATALYST=1 -DWITH_MPI=1 \
       -DCMAKE_PREFIX_PATH=$CATALYSTBUILD \
       -DParaView_CATALYST_DIR={Location of the ParaView Catalyst Library Directory}
 cmake --build myLulesh-build
@@ -35,13 +35,11 @@ The first step in the process will be to use some sample data that best represen
 
 ### Where do I get sample data?
 
- One way of generating sample would be to run the simulation on a smaller problem.  In the Version4 directory we have provided ParaViewCatalyst script that outputs the simulation's geometry and fields.
+ One way of generating sample would be to run the simulation on a smaller problem.  In the Version5 directory we have provided ParaViewCatalyst script that outputs the simulation's geometry and fields.
 
 ```bash
-export CATALYST_IMPLEMENTATION_NAME=paraview
-export CATALYST_IMPLEMENTATION_PATHS=<paraview build directory>/lib/catalyst
 cd myLulesh-build
-mpiexec -np 8 ./lulesh2.0 -x ../Version4/script.py -p -i 30 -s 10
+mpiexec -np 8 ./lulesh2.0 -x ../Version5/input.yaml -p -i 30 -s 10
 ```
 The above will create a coarse simulation composed of 30 time-steps.  If we only want to see the last time-step, we could edit script.py and change ``options.GlobalTrigger.Frequency`` parameter from **1** to **30** and then run the above commands.  This will only write out the result for the last time-step.
 
@@ -103,22 +101,35 @@ Next you will need to save the pipeline you have created as a ParaView Catalyst 
     <figcaption>This video shows how to save the created pipeline as a ParaView Catalyst Python state file.</figcaption>
 </figure>
 
-## Step 7 - Prepping the Simulation
+## Step 7 - Creating the Catalyst Input File
+Lets copy the **input.yaml** file that was created in the myLulesh-build directory and call it **myLulesh.yaml**.  We need to edit this file so that it uses the ParaView Catalyst script file we just created.  Below is an example created from a generated input.yaml file.  What needs to be changed in the line that starts with **filename:**.  You need to replace the string that follows it with the path of the ParaView Catalyst script you just saved. Remember to keep the double quotes around the string!
 
-Back to the build directory of the simulation we setup the environment and run the simulation:
-```bash
-export CATALYST_IMPLEMENTATION_NAME=paraview
-export CATALYST_IMPLEMENTATION_PATHS=<paraview build directory>/lib/catalyst
-cd myLulesh-build
-mpiexec -np 8 ./lulesh2.0 -x lulest_state.py -p -i 1000 -s 50
+```yaml
+---
+  catalyst:
+    scripts:
+      script0:
+        # Filename refers to the ParaView Catalyst Pipeline to be used
+        filename: "/Users/theUser/Projects/Kitware/CatalystExamples/ParaView/Lulesh-tutorial/myLulesh/script.py"
+  catalyst_load:
+    implementation: paraview
+    search_paths:
+      # This should be set to the directory where the ParaView Catalyst Libraries are located
+      paraview: "/Users/theUser/Projects/Kitware/Builds/ParaView_noQt_XC16.2_CM3.31.6/lib/catalyst"
+
 ```
-
-The simulation will run for a 1000 steps but you can stop it earlier.
-
 
 ## Step 8 - Running the Simulation and Reviewing the Generated Files
 
-Now lets run the simulation and examines the following:
+Now lets run the simulation:
+
+```bash
+cd myLulesh-build
+mpiexec -np 8 ./lulesh2.0 -x myLulesh.yaml -p -i 1000 -s 50
+```
+The simulation will run for a 1000 steps but you can stop it earlier.
+
+You can now examine the following:
  * The generated line plots images
  * The generated images of the 3D data
 
