@@ -45,7 +45,7 @@ export default defineConfig({
           { text: 'Blogs', link: 'https://www.kitware.com/tag/paraview-catalyst/' },
           { text: 'Discussions', link: 'https://discourse.paraview.org/c/in-situ-support' },
           { text: 'Issue Tracker', link: 'https://gitlab.kitware.com/groups/paraview/-/issues/?sort=created_date&state=opened&label_name%5B%5D=area%3Acatalyst&first_page_size=20' },
-          { text: 'Webinars', link: 'https://www.kitware.com/webinars/' },
+          { text: 'Webinars', link: 'https://www.kitware.com/webinars/#catalyst' },
           { text: 'Services', link: 'https://www.kitware.com/support' },
         ]
       }
