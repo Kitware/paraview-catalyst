@@ -16,7 +16,11 @@ Note to Mac developers: All of the above software is available using Homebrew.
 
 The first step is to build the Catalyst library that will provide the means of representing the data that can then be processed by various consumer implementations such as ParaView Catalyst.  This is also the library that you will be using within your code so that you can pass the relevant information to the various Catalyst implementations.
 
-You can find the basic build instructions for Catalyst [here](https://catalyst-in-situ.readthedocs.io/en/latest/build_and_install.html) which includes how to checkout the Catalyst source.
+To checkout the Catalyst source you can use the following git command:
+
+```bash
+git clone https://gitlab.kitware.com/paraview/catalyst.git
+```
 
 You can use the following commands  to configure and build Catalyst with MPI and Python Wrapping which we will need for the ParaView Catalyst Examples:
 
@@ -30,6 +34,9 @@ cmake --build $CATALYSTBUILD
 ```
 
 __Note:__ `-G Ninja` assumes that you have the [Ninja build system](https://ninja-build.org).  Also you can choose to build Catalyst without MPI support by setting ``-DCATALYST_USE_MPI=OFF`` and without Python wrappings by setting ``-DCATALYST_WRAP_PYTHON = OFF``
+
+You can find additional build instructions for Catalyst [here](https://catalyst-in-situ.readthedocs.io/en/latest/build_and_install.html).
+
 
 ## Building ParaView Catalyst
 

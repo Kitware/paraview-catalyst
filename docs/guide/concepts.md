@@ -31,7 +31,7 @@ The in situ approach used by ParaView Catalyst addresses the I/O issue by perfor
 ## How Does ParaView Catalyst Interface With the Simulation?
 
 ### Introducing Catalyst, Conduit, and Mesh Blueprint
-Your simulation code itself will not know about ParaView Catalyst but will be using a small easy to use library called Catalyst.  The Catalyst library is written in C but also provides C++, Python, and FORTRAN wrappings.  It provides the routines to initialize and finalize Catalyst as well as a routine to execute  the processing of a timestep.
+Your simulation code itself will not know about ParaView Catalyst but will be using a small easy to use library called Catalyst.  The [Catalyst library](https://gitlab.kitware.com/paraview/catalyst) is written in C but also provides C++, Python, and FORTRAN wrappings.  It provides the routines to initialize and finalize Catalyst as well as a routine to execute  the processing of a timestep.
 
 For representing the data associated with the simulation, Catalyst uses Conduit.  Conduit, an open-source project developed by Lawrence Livermore National Laboratory, offers an intuitive model for representing hierarchical scientific data in C++, C, FORTRAN, and Python. Its applications include in-core data coupling between packages, serialization, and I/O operations.
 
