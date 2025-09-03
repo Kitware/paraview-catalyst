@@ -776,6 +776,7 @@ First, create a simple ParaView Catalyst script:
 catalystChannel = "grid"
 
 from paraview.simple import *
+from paraview import catalyst
 # Pipeline
 data = TrivialProducer(registrationName=catalystChannel)
 extractor = CreateExtractor('VTPD', data)
