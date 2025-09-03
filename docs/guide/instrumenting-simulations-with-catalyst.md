@@ -424,7 +424,7 @@ struct cmdLineOpts {
        printf(" -f <numfiles>   : Number of files to split viz dump into (def: (np+10)/9)\n");
        printf(" -p              : Print out progress\n");
        printf(" -v              : Output viz file (requires compiling with -DVIZ_MESH\n");
- +     printf(" -x <script>     : ParaView analysis script (requires compiling with -DVIZ_CATALYST)\n");
++      printf(" -x <script>     : ParaView analysis script (requires compiling with -DVIZ_CATALYST)\n");
        printf(" -h              : This message\n");
        printf("\n\n");
     }
