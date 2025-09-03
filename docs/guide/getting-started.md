@@ -230,9 +230,10 @@ Now lets see what happens if all we do is change the specified script to generat
 
 ```bash
 ./bin/CxxUnstructuredGrid catalyst_pipeline_with_rendering.json
+ls ./datasets
 ```
 
-Now instead of simply showing output on the screen, it has generated images for each time step and placed them in datasets sub-directory of the example’s build directory.  Combining these images together results in the following short video comprising of 5 time-steps.
+Now instead of simply showing output on the screen, it has generated images for each time step and placed them in ``./datasets`` sub-directory of the example’s build directory.  Combining these images together results in the following short video comprising of 5 time-steps.
 
 __Note:__ If you compare this input file with the one used previously you will notice that the only difference is the Python script being used.  All of the rest of the information is the same.
 
@@ -248,6 +249,7 @@ But what if you wanted ParaView Catalyst to extract information from the simulat
 
 ```bash
 ./bin/CxxUnstructuredGrid gridwriter.json
+ls ./datasets
 ```
 
 Now instead of producing images, this script will now generate VTK multi-block (.vtm) files of the extracted time-steps that can then be read back into ParaView.
