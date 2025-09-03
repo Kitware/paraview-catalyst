@@ -329,8 +329,11 @@ Next we will update the CMake file to allow the user to turn on/off the Catalyst
 
 ...
 
- add_executable(${LULESH_EXEC} ${LULESH_SOURCES})
- target_link_libraries(${LULESH_EXEC} ${LULESH_EXTERNAL_LIBS})
+ if(WITH_OPENMP)
+  target_link_libraries(${LULESH_EXEC}
+    PRIVATE
+      OpenMP::OpenMP_CXX)
+ endif()
 +
 +if(WITH_CATALYST)
 +  target_compile_definitions(${LULESH_EXEC}
