@@ -42,9 +42,13 @@ You can find additional build instructions for Catalyst [here](https://catalyst-
 
 The next step is to build the ParaView Catalyst implementation.  The first step is to download ParaView’s source code.  You can access it either  from [ParaView’s download page](https://www.paraview.org/download/) or by checking out the code from [ParaView’s gitlab repository](https://gitlab.kitware.com/paraview/paraview).
 
+```bash
+git clone --recursive https://gitlab.kitware.com/paraview/paraview.git
+```
+
 __Note:__ If you are using the download page make sure you are downloading the source files and not one of the pre-compiled versions of ParaView.
 
-Next we need to create a build directory for ParaView,  configure it for ParaView Catalyst, and build it using the following commands:
+Next we need to create a build directory for ParaView, configure it for ParaView Catalyst, and build it using the following commands:
 
 ```bash
 mkdir [name of ParaView Build Directory]
