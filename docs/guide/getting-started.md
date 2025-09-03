@@ -67,7 +67,7 @@ __Note:__ These variables are not used by the example, but are used for convenie
 
 You can access the Catalyst Examples source code by doing the following:
 ```bash
-git clone https://gitlab.kitware.com/catalyst-examples.git
+git clone https://gitlab.kitware.com/paraview/catalyst-examples.git
 cd catalyst-examples/ParaView
 ```
 
