@@ -51,15 +51,18 @@ __Note:__ If you are using the download page make sure you are downloading the s
 Next we need to create a build directory for ParaView, configure it for ParaView Catalyst, and build it using the following commands:
 
 ```bash
-mkdir [name of ParaView Build Directory]
-cd  [name of ParaView Build Directory]
-ccmake -G Ninja -DPARAVIEW_USE_PYTHON=ON -DPARAVIEW_USE_MPI=ON -DVTKSMP_IMPLEMENTATION_TYPE=TBB -DCMAKE_BUILD_TYPE=Release -DPARAVIEW_ENABLE_CATALYST=ON -DPARAVIEW_BUILD_QT_GUI=OFF -Dcatalyst_DIR=[path to Catalyst Build Directory]  [path to the ParaView Source Directory]
+export PVSOURCE=[the path to the ParaView source code]
+export PVBUILD=[the path to the ParaView build directory]
+
+mkdir $PVBUILD
+cd $PVBUILD
+ccmake -G Ninja -DPARAVIEW_USE_PYTHON=ON -DPARAVIEW_USE_MPI=ON -DVTKSMP_IMPLEMENTATION_TYPE=TBB -DCMAKE_BUILD_TYPE=Release -DPARAVIEW_ENABLE_CATALYST=ON -DPARAVIEW_BUILD_QT_GUI=OFF -Dcatalyst_DIR=$CATALYSTBUILD $PVSOURCE
 cmake --build .
 ```
 
 ## Building An Example
 
-OK, so you now have all of the pieces built required to interface with your simulation code and to use ParaView’s post-processing power so let's verify this with an example in the ParaView source directory.  For brevity lets define the following environment variables:
+OK, so you now have all of the pieces built required to interface with your simulation code and to use ParaView’s post-processing power so let's verify this with an example in the ParaView source directory.  For brevity lets make sure we've defined the following environment variables:
 
 ```bash
 export PVSOURCE=[the path to the ParaView source code]
