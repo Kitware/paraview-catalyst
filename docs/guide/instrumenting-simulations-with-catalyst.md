@@ -487,8 +487,7 @@ Next we update `InitializeCatalyst` definition to accept and process `cmdLineOpt
 
    for (size_t cc=0; cc < opts.scripts.size(); ++cc)
    {
-     conduit_cpp::Node list_entry = node["catalyst/scripts/script_" + std::to_string(cc)].append();
-     list_entry.set(opts.scripts[cc]);
+     node["catalyst/scripts/script_" + std::to_string(cc)] = opts.scripts[cc];
    }
 
    catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
