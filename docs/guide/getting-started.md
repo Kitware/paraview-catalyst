@@ -12,6 +12,19 @@ Building ParaView Catalyst will require the following libraries/tools:
 
 Note to Mac developers: All of the above software is available using Homebrew.
 
+## Code location
+
+For brevity let's export the paths of our Catalyst/ParaView source/build directories. The sections below will populate these directories.
+
+```bash
+export PVSOURCE=[the path to the ParaView source code]
+export PVBUILD=[the path to the ParaView build directory]
+export CATALYSTSRC=[the path to where you checked-out Catalyst source]
+export CATALYSTBUILD=[the path to the Catalyst build directory]
+```
+
+__Note:__ These variables are not used by the example in code. They're just for the guide's convenience/readability.
+
 ## Building Catalyst
 
 The first step is to build the Catalyst library that will provide the means of representing the data that can then be processed by various consumer implementations such as ParaView Catalyst.  This is also the library that you will be using within your code so that you can pass the relevant information to the various Catalyst implementations.
@@ -19,16 +32,13 @@ The first step is to build the Catalyst library that will provide the means of r
 To checkout the Catalyst source you can use the following git command:
 
 ```bash
-git clone https://gitlab.kitware.com/paraview/catalyst.git
+git clone https://gitlab.kitware.com/paraview/catalyst.git $CATALYSTSRC
 ```
 
 You can use the following commands  to configure and build Catalyst with MPI and Python Wrapping which we will need for the ParaView Catalyst Examples:
 
 ```bash
-# The following exports are used for convenience
-export CATALYSTSRC=[the path to where you checked-out Catalyst's source]
-export CATALYSTBUILD=[the path to the Catalyst build directory]
-
+# Using the exported $CATALYSTSRC and $CATALYSTBUILD directories from above
 cmake -S $CATALYSTSRC -B $CATALYSTBUILD -G Ninja -DCATALYST_USE_MPI=ON -DCATALYST_WRAP_PYTHON=ON
 cmake --build $CATALYSTBUILD
 ```
@@ -43,7 +53,7 @@ You can find additional build instructions for Catalyst [here](https://catalyst-
 The next step is to build the ParaView Catalyst implementation.  The first step is to download ParaView’s source code.  You can access it either  from [ParaView’s download page](https://www.paraview.org/download/) or by checking out the code from [ParaView’s gitlab repository](https://gitlab.kitware.com/paraview/paraview).
 
 ```bash
-git clone --recursive https://gitlab.kitware.com/paraview/paraview.git
+git clone --recursive https://gitlab.kitware.com/paraview/paraview.git $PVSOURCE
 ```
 
 __Note:__ If you are using the download page make sure you are downloading the source files and not one of the pre-compiled versions of ParaView.
@@ -51,26 +61,13 @@ __Note:__ If you are using the download page make sure you are downloading the s
 Next we need to create a build directory for ParaView, configure it for ParaView Catalyst, and build it using the following commands:
 
 ```bash
-export PVSOURCE=[the path to the ParaView source code]
-export PVBUILD=[the path to the ParaView build directory]
-
-mkdir $PVBUILD
-cd $PVBUILD
-ccmake -G Ninja -DPARAVIEW_USE_PYTHON=ON -DPARAVIEW_USE_MPI=ON -DVTKSMP_IMPLEMENTATION_TYPE=TBB -DCMAKE_BUILD_TYPE=Release -DPARAVIEW_ENABLE_CATALYST=ON -DPARAVIEW_BUILD_QT_GUI=OFF -Dcatalyst_DIR=$CATALYSTBUILD $PVSOURCE
-cmake --build .
+cmake -S $PVSOURCE -B $PVBUILD -G Ninja -DPARAVIEW_USE_PYTHON=ON -DPARAVIEW_USE_MPI=ON -DVTKSMP_IMPLEMENTATION_TYPE=TBB -DCMAKE_BUILD_TYPE=Release -DPARAVIEW_ENABLE_CATALYST=ON -DPARAVIEW_BUILD_QT_GUI=OFF -Dcatalyst_DIR=$CATALYSTBUILD
+cmake --build $PVBUILD
 ```
 
 ## Building An Example
 
-OK, so you now have all of the pieces built required to interface with your simulation code and to use ParaView’s post-processing power so let's verify this with an example in the ParaView source directory.  For brevity lets make sure we've defined the following environment variables:
-
-```bash
-export PVSOURCE=[the path to the ParaView source code]
-export PVBUILD=[the path to the ParaView build directory]
-export CATALYSTBUILD=[the path to the Catalyst build directory]
-```
-
-__Note:__ These variables are not used by the example, but are used for convenience.
+OK, so you now have all of the pieces built required to interface with your simulation code and to use ParaView’s post-processing power so let's verify this with an example in the ParaView source directory.
 
 You can access the Catalyst Examples source code by doing the following:
 ```bash
