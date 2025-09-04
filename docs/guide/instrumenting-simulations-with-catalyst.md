@@ -329,8 +329,11 @@ Next we will update the CMake file to allow the user to turn on/off the Catalyst
 
 ...
 
- add_executable(${LULESH_EXEC} ${LULESH_SOURCES})
- target_link_libraries(${LULESH_EXEC} ${LULESH_EXTERNAL_LIBS})
+ if(WITH_OPENMP)
+  target_link_libraries(${LULESH_EXEC}
+    PRIVATE
+      OpenMP::OpenMP_CXX)
+ endif()
 +
 +if(WITH_CATALYST)
 +  target_compile_definitions(${LULESH_EXEC}
@@ -421,7 +424,7 @@ struct cmdLineOpts {
        printf(" -f <numfiles>   : Number of files to split viz dump into (def: (np+10)/9)\n");
        printf(" -p              : Print out progress\n");
        printf(" -v              : Output viz file (requires compiling with -DVIZ_MESH\n");
- +     printf(" -x <script>     : ParaView analysis script (requires compiling with -DVIZ_CATALYST)\n");
++      printf(" -x <script>     : ParaView analysis script (requires compiling with -DVIZ_CATALYST)\n");
        printf(" -h              : This message\n");
        printf("\n\n");
     }
@@ -484,8 +487,7 @@ Next we update `InitializeCatalyst` definition to accept and process `cmdLineOpt
 
    for (size_t cc=0; cc < opts.scripts.size(); ++cc)
    {
-     conduit_cpp::Node list_entry = node["catalyst/scripts/script_" + std::to_string(cc)].append();
-     list_entry.set(opts.scripts[cc]);
+     node["catalyst/scripts/script_" + std::to_string(cc)] = opts.scripts[cc];
    }
 
    catalyst_status err = catalyst_initialize(conduit_cpp::c_node(&node));
@@ -774,6 +776,7 @@ First, create a simple ParaView Catalyst script:
 catalystChannel = "grid"
 
 from paraview.simple import *
+from paraview import catalyst
 # Pipeline
 data = TrivialProducer(registrationName=catalystChannel)
 extractor = CreateExtractor('VTPD', data)
