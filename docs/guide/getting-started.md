@@ -255,4 +255,9 @@ Now instead of producing images, this script will now generate VTK multi-block (
 |:--:|
 |Result of using the gridwriter input file and loading the generated files into ParaView.|
 
+## Need More Help?
 
+- **[ParaView-Catalyst Blueprint](https://docs.paraview.org/en/latest/Catalyst/blueprints.html)**: Full reference for the Conduit node protocols used by initialize, execute, and results.
+- **[Catalyst Examples](https://gitlab.kitware.com/paraview/catalyst-examples)**: Additional examples covering different mesh types and use cases.
+- **[ParaView Discourse](https://discourse.paraview.org/c/in-situ-support)**: Community forum for questions about Catalyst and in situ workflows.
+- **[Kitware Support](https://www.kitware.com/support)**: Commercial support and training.
