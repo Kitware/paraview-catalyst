@@ -18,8 +18,8 @@ hero:
       text: Quick start
       link: /guide/getting-started
     - theme: sponsor
-      text: Latest Webinar August 2025
-      link: https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/
+      text: Upcoming Webinar May 20, 2026
+      link: https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/
 
 features:
   - title: In Action
