@@ -18,7 +18,7 @@ hero:
       text: Quick start
       link: /guide/getting-started
     - theme: sponsor
-      text: Upcoming Webinar May 20, 2026
+      text: Latest Webinar May 20, 2026
       link: https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/
 
 features:
