@@ -25,7 +25,7 @@ features:
   - title: In Action
     icon:
       src: /logos/favicon-196x196.png
-      alt: Pure Python
+      alt: ParaView Catalyst
       width: 28
     details: ParaView Catalyst has powered visualization across an impressive spectrum of scientific and engineering domains—from the subatomic world of High-Energy Physics to the complex flows of Computational Fluid Dynamics.
     link: /usecase/
@@ -39,10 +39,10 @@ features:
   - title: Open Source
     icon:
       src: /logos/opensource.svg
-      alt: Pure Python
+      alt: Open source
       width: 28
     details: ParaView Catalyst is an open source project licensed under BSD 3-Clause license that enables the broadest possible audience, including commercial organizations, to use the software royalty free.
-    link: https://www.kitware.com/open-source/
+    link: https://www.paraview.org/license/
   - title: Support and Services
     icon:
       src: /logos/k.svg
